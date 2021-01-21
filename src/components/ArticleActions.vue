@@ -30,76 +30,90 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
 import { Article } from 'components/models'
+import {
+  ARTICLE_DELETE,
+  FAVORITE_ADD,
+  FAVORITE_REMOVE,
+  FETCH_PROFILE_FOLLOW,
+  FETCH_PROFILE_UNFOLLOW
+} from 'store/actions.type'
+import { computed, defineComponent } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 interface ArticleActionsProps {
   article: Article
   canModify: boolean
-  isAuthenticated: boolean
-  profile: any
 }
 
 export default defineComponent({
   name: 'ArticleActions',
-  setup (props: ArticleActionsProps, context) {
+  setup(props: ArticleActionsProps) {
     const {
       article,
       canModify
     } = props
+
+    const router = useRouter()
+    const store = useStore()
+
+    const profile = computed(() => store.getters.profile)
+    const isAuthenticated = computed(() => store.getters.isAuthenticated)
+
     const editArticleLink = computed(() => ({
       name: 'article-edit',
-      params: { slug: article.slug }
+      params: {slug: article.slug}
     }))
     const toggleFavoriteButtonClasses = computed(() => ({
       'btn-primary': article.favorited,
       'btn-outline-primary': !article.favorited
     }))
     const followUserLabel = computed(() =>
-        `${this.profile.following ? 'Unfollow' : 'Follow'} ${
+        `${profile.value.following ? 'Unfollow' : 'Follow'} ${
             article.author.username
         }`)
     const favoriteArticleLabel = computed(() => article.favorited ? 'Unfavorite Article' : 'Favorite Article')
-    const favoriteCounter = computed(() => `(${this.article.favoritesCount})`)
+    const favoriteCounter = computed(() => `(${article.favoritesCount})`)
 
-    function toggleFavorite () {
+    function toggleFavorite() {
       if (!isAuthenticated) {
-        context.router.push({ name: 'login' })
+        router.push({name: 'login'})
         return
       }
-      const action = article.favorited ? FAVORITE_REMOVE : FAVORITE_ADD
+      const action: string = article.favorited ? FAVORITE_REMOVE : FAVORITE_ADD
       // todo
-      // context.store.dispatch(action, article.slug)
+      store.dispatch(action, article.slug)
     }
 
-    function toggleFollow () {
+    function toggleFollow() {
       if (!isAuthenticated) {
-        context.router.push({ name: 'login' })
+        router.push({name: 'login'})
         return
       }
       const action = this.article.following
           ? FETCH_PROFILE_UNFOLLOW
           : FETCH_PROFILE_FOLLOW
       // todo
-      // this.$store.dispatch(action, {
-      //   username: this.profile.username
-      // })
+      store.dispatch(action, {
+        username: profile.value.username
+      })
     }
 
-    async function deleteArticle () {
+    async function deleteArticle() {
       try {
-        await this.$store.dispatch(ARTICLE_DELETE, this.article.slug)
+        await store.dispatch(ARTICLE_DELETE, article.slug)
         // todo
-        // this.$router.push('/')
+        await router.push('/')
       } catch (err) {
         console.error(err)
       }
     }
 
     return {
-      canModify,
-      isAuthenticated,
       profile,
+      isAuthenticated,
+      canModify,
       editArticleLink,
       toggleFavoriteButtonClasses,
       followUserLabel,

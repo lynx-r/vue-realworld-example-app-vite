@@ -16,14 +16,15 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import VArticlePreview from 'components/VArticlePreview.vue'
 import VPagination from 'components/VPagination.vue'
+import { FETCH_ARTICLES } from 'store/actions.type'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 
 interface ArticleListProps {
-  type?
-  author?
+  type?: any
+  author?: any
   tag?: string
   favorited?: boolean
   itemsPerPage?: number
@@ -48,12 +49,18 @@ export default defineComponent({
     } = props
 
     const store = useStore()
+    const isLoading = computed(() => store.getters.isLoading)
+    const articlesCount = computed(() => store.getters.articlesCount)
+    const articles = computed(() => store.getters.articles)
 
     const currentPage = ref(1)
     const listConfig = computed(() => {
       const filters = {
-        offset: (currentPage - 1) * itemsPerPage,
-        limit: itemsPerPage
+        offset: (currentPage.value - 1) * itemsPerPage!,
+        limit: itemsPerPage,
+        author: undefined,
+        tag: '',
+        favorited: false
       }
       if (author) {
         filters.author = author
@@ -66,39 +73,33 @@ export default defineComponent({
       }
       return {
         type,
-        filters
+        ...filters
       }
     })
 
     const pages = computed(() => {
-      if (isLoading || articlesCount <= itemsPerPage) {
+      if (isLoading || articlesCount.value <= itemsPerPage!) {
         return []
       }
       return [
-        ...Array(Math.ceil(articlesCount / itemsPerPage)).keys()
+        ...Array(Math.ceil(articlesCount.value / itemsPerPage!)).keys()
       ].map(e => e + 1)
     })
 
-    const getters = mapGetters({
-      articlesCount: 'home/articlesCount',
-      isLoading: 'home/isLoading',
-      articles: 'home/articles'
-    })
-
-    function fetchArticles () {
+    function fetchArticles() {
       console.log(context)
       console.log('try fetch articles')
       // todo
-      // this.$store.dispatch(FETCH_ARTICLES, this.listConfig);
+      store.dispatch(FETCH_ARTICLES, listConfig)
     }
 
-    function resetPagination () {
-      listConfig.offset = 0
+    function resetPagination() {
+      listConfig.value.offset = 0
       currentPage.value = 1
     }
 
     watch(currentPage, (newValue) => {
-      listConfig.filters.offset = (newValue - 1) * itemsPerPage
+      listConfig.value.offset = (newValue - 1) * itemsPerPage!
       fetchArticles()
     })
 
@@ -112,7 +113,7 @@ export default defineComponent({
     })
 
     return {
-      ...getters,
+      articles,
       listConfig,
       pages,
       currentPage,

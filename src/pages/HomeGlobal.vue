@@ -4,13 +4,16 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+
+import ArticleList from 'components/ArticleList.vue'
+
 export default {
   name: 'HomeGlobal',
   components: {
-
+    ArticleList
   }
-};
+}
 </script>
 
 <style scoped>

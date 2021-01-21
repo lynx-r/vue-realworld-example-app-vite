@@ -35,15 +35,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
 import ArticleActions from 'components/ArticleActions.vue'
 import { Article } from 'components/models'
+import { FAVORITE_ADD, FAVORITE_REMOVE } from 'store/actions.type'
+import { defineComponent } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 interface ArticleMetaProps {
   article: Article
   actions: any
-  currentUser
-  isAuthenticated
+  currentUser: any
+  isAuthenticated: boolean
 }
 
 export default defineComponent({
@@ -51,7 +54,7 @@ export default defineComponent({
   components: {
     ArticleActions
   },
-  setup (props: ArticleMetaProps, context) {
+  setup(props: ArticleMetaProps) {
     const {
       actions,
       article,
@@ -59,22 +62,25 @@ export default defineComponent({
       isAuthenticated
     } = props
 
-    function isCurrentUser () {
+    const router = useRouter()
+    const store = useStore()
+
+    function isCurrentUser() {
       if (currentUser.username && article.author.username) {
         return currentUser.username === article.author.username
       }
       return false
     }
 
-    function toggleFavorite () {
+    function toggleFavorite() {
       if (!isAuthenticated) {
         // todo
-        context.router.push({ name: 'login' })
+        router.push({name: 'login'})
         return
       }
-      // const action = article.favorited ? FAVORITE_REMOVE : FAVORITE_ADD
+      const action: string = article.favorited ? FAVORITE_REMOVE : FAVORITE_ADD
       // todo
-      // this.$store.dispatch(action, this.article.slug);
+      store.dispatch(action, article.slug);
     }
 
     return {
