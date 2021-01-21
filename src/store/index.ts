@@ -1,4 +1,4 @@
-import Vuex from 'vuex'
+import { createStore } from 'vuex'
 import home from './home'
 import { HomeStateInterface } from './home/state'
 
@@ -17,19 +17,8 @@ export interface StateInterface {
   home: HomeStateInterface
 }
 
-export default store(function ({ Vue }) {
-  Vue.use(Vuex)
-
-  const Store = new Vuex.Store<StateInterface>({
-    modules: {
-      home
-      // example
-    },
-
-    // enable strict mode (adds overhead!)
-    // for dev mode only
-    strict: !!process.env.DEBUGGING
-  })
-
-  return Store
+export default createStore({
+  modules: {
+    home
+  },
 })

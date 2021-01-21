@@ -7,13 +7,14 @@
 <script lang="ts">
 
 import ArticleList from 'components/ArticleList.vue'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'HomeGlobal',
   components: {
     ArticleList
   }
-}
+})
 </script>
 
 <style scoped>

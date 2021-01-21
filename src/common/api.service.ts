@@ -1,80 +1,91 @@
-import { useAxios } from '@vue-composable/axios/dist/v3/axios';
+import { makeAxios } from '@vue-composable/axios'
+import axios from 'axios'
+import { Article } from 'components/models'
 import { API_URL } from './config'
 import JwtService from './jwt.service'
 
+const axiosClient = axios.create({baseURL: API_URL})
+
 const ApiService = {
-  init () {
-    this.axios = useAxios(API_URL)
+  axios,
+
+  init() {
+    const {client} = makeAxios(axiosClient)
+    this.axios = client
   },
 
-  setHeader () {
+  setHeader() {
     this.axios.defaults.headers.common[
       'Authorization'
       ] = `Token ${JwtService.getToken()}`
   },
 
-  query (resource, params) {
-    debugger
+  query(resource: string, params: any) {
     return this.axios.get(resource, params).catch(error => {
       throw new Error(`[RWV] ApiService ${error}`)
     })
   },
 
-  get (resource, slug = '') {
+  get(resource: string, slug = '') {
     return this.axios.get(`${resource}/${slug}`).catch(error => {
       throw new Error(`[RWV] ApiService ${error}`)
     })
   },
 
-  post (resource, params) {
+  post(resource: string, params?: any) {
     return this.axios.post(`${resource}`, params)
   },
 
-  update (resource, slug, params) {
+  update(resource: string, slug: string, params: any) {
     return this.axios.put(`${resource}/${slug}`, params)
   },
 
-  put (resource, params) {
+  put(resource: string, params: any) {
     return this.axios.put(`${resource}`, params)
   },
 
-  delete (resource) {
+  delete(resource: string) {
     return this.axios.delete(resource).catch(error => {
       throw new Error(`[RWV] ApiService ${error}`)
     })
   }
+
 }
 
 export default ApiService
 
 export const TagsService = {
-  get () {
+  get() {
     return ApiService.get('tags')
   }
 }
 
 export const ArticlesService = {
-  query (type, params) {
+  query(type: string, params: any) {
     return ApiService.query('articles' + (type === 'feed' ? '/feed' : ''), {
       params: params
     })
   },
-  get (slug) {
+
+  get(slug: string) {
     return ApiService.get('articles', slug)
   },
-  create (params) {
-    return ApiService.post('articles', { article: params })
+
+  create(params: Article) {
+    return ApiService.post('articles', {article: params})
   },
-  update (slug, params) {
-    return ApiService.update('articles', slug, { article: params })
+
+  update(slug: string, params: Article) {
+    return ApiService.update('articles', slug, {article: params})
   },
-  destroy (slug) {
+
+  destroy(slug: string) {
     return ApiService.delete(`articles/${slug}`)
   }
 }
 
 export const CommentsService = {
-  get (slug) {
+  get(slug: string) {
     if (typeof slug !== 'string') {
       throw new Error(
         '[RWV] CommentsService.get() article slug required to fetch comments'
@@ -83,22 +94,22 @@ export const CommentsService = {
     return ApiService.get('articles', `${slug}/comments`)
   },
 
-  post (slug, payload) {
+  post(slug: string, payload: any) {
     return ApiService.post(`articles/${slug}/comments`, {
-      comment: { body: payload }
+      comment: {body: payload}
     })
   },
 
-  destroy (slug, commentId) {
+  destroy(slug: string, commentId: string) {
     return ApiService.delete(`articles/${slug}/comments/${commentId}`)
   }
 }
 
 export const FavoriteService = {
-  add (slug) {
+  add(slug: string) {
     return ApiService.post(`articles/${slug}/favorite`)
   },
-  remove (slug) {
+  remove(slug: string) {
     return ApiService.delete(`articles/${slug}/favorite`)
   }
 }
