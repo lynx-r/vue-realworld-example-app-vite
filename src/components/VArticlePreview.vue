@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, toRefs } from 'vue'
 import { Article } from 'components/models'
 import ArticleMeta from '~/components/ArticleMeta.vue'
 import TagList from '~/components/TagList.vue'
@@ -22,13 +22,13 @@ interface ArticlePreviewProps {
 
 export default defineComponent({
   name: 'ArticlePreview',
+  props: ['article'],
   components: {
     ArticleMeta,
     TagList
   },
   setup (props: ArticlePreviewProps) {
-    const { article } = props
-    console.log(article)
+    const { article } = toRefs(props)
     const articleLink = computed(() => ({
       name: 'article',
       params: { slug: article?.slug }

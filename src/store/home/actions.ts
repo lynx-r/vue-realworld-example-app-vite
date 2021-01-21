@@ -7,7 +7,6 @@ import { HomeStateInterface } from './state';
 
 const actions: ActionTree<HomeStateInterface, StateInterface> = {
   [FETCH_ARTICLES]({ commit }, params) {
-    console.log('???')
     commit(FETCH_START);
     return ArticlesService.query(params.type, params.filters)
       .then(({ data }: any) => {

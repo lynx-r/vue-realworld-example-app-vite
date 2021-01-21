@@ -13,10 +13,15 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
+interface TagListProps {
+  tags: string[]
+}
+
 export default defineComponent({
   name: 'TagList',
-  setup (props: { tags: string[] }) {
-    return { ...props }
+  props: ['tags'],
+  setup(props: TagListProps) {
+    return {...props}
   }
 })
 </script>

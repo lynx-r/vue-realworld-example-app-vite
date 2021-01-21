@@ -30,6 +30,9 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 import { Article } from '~/components/models'
 import {
   ARTICLE_DELETE,
@@ -38,9 +41,6 @@ import {
   FETCH_PROFILE_FOLLOW,
   FETCH_PROFILE_UNFOLLOW
 } from '~/store/actions.type'
-import { computed, defineComponent } from 'vue'
-import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
 
 interface ArticleActionsProps {
   article: Article
@@ -49,6 +49,7 @@ interface ArticleActionsProps {
 
 export default defineComponent({
   name: 'ArticleActions',
+  props: ['article', 'canModify'],
   setup(props: ArticleActionsProps) {
     const {
       article,

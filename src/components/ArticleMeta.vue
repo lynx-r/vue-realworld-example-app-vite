@@ -12,7 +12,7 @@
       >
         {{ article.author.username }}
       </router-link>
-      <span class="date">{{ article.createdAt | date }}</span>
+      <span class="date">{{ article.createdAt }}</span>
     </div>
     <article-actions
         v-if="actions"
@@ -35,12 +35,12 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, toRefs } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 import ArticleActions from '~/components/ArticleActions.vue'
 import { Article } from '~/components/models'
 import { FAVORITE_ADD, FAVORITE_REMOVE } from '~/store/actions.type'
-import { defineComponent } from 'vue'
-import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
 
 interface ArticleMetaProps {
   article: Article
@@ -51,6 +51,7 @@ interface ArticleMetaProps {
 
 export default defineComponent({
   name: 'ArticleMeta',
+  props: ['article', 'actions', 'currentUser', 'isAuthenticated'],
   components: {
     ArticleActions
   },
@@ -60,7 +61,7 @@ export default defineComponent({
       article,
       currentUser,
       isAuthenticated
-    } = props
+    } = toRefs(props)
 
     const router = useRouter()
     const store = useStore()
@@ -80,11 +81,12 @@ export default defineComponent({
       }
       const action: string = article.favorited ? FAVORITE_REMOVE : FAVORITE_ADD
       // todo
-      store.dispatch(action, article.slug);
+      store.dispatch(action, article.slug)
     }
 
     return {
-      ...props,
+      article,
+      actions,
       isCurrentUser,
       toggleFavorite
     }

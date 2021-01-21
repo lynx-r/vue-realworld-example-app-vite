@@ -16,8 +16,8 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, watch } from 'vue'
-import { createNamespacedHelpers, useStore } from 'vuex'
+import { computed, defineComponent, onMounted, ref, toRefs, watch } from 'vue'
+import { useStore } from 'vuex'
 import { Article } from '~/components/models'
 import VArticlePreview from '~/components/VArticlePreview.vue'
 import VPagination from '~/components/VPagination.vue'
@@ -34,8 +34,6 @@ interface ArticleListProps {
   articlesCount: number
 }
 
-const {mapState, mapActions, mapGetters} = createNamespacedHelpers('home')
-
 export default defineComponent({
   name: 'ArticleList',
   components: {
@@ -49,9 +47,8 @@ export default defineComponent({
       itemsPerPage,
       tag,
       type,
-    } = props
+    } = toRefs(props)
 
-    debugger
     const store = useStore()
     const isLoading = computed(() => store.getters['isLoading'])
     const articlesCount = computed(() => store.getters['articlesCount'])
@@ -113,7 +110,6 @@ export default defineComponent({
       fetchArticles()
     })
 
-    console.log(articles)
     return {
       isLoading,
       articles,
