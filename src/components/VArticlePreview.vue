@@ -12,9 +12,9 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import ArticleMeta from 'components/ArticleMeta.vue'
 import { Article } from 'components/models'
-import TagList from 'components/TagList.vue'
+import ArticleMeta from '~/components/ArticleMeta.vue'
+import TagList from '~/components/TagList.vue'
 
 interface ArticlePreviewProps {
   article: Article
@@ -28,9 +28,10 @@ export default defineComponent({
   },
   setup (props: ArticlePreviewProps) {
     const { article } = props
+    console.log(article)
     const articleLink = computed(() => ({
       name: 'article',
-      params: { slug: article.slug }
+      params: { slug: article?.slug }
     }))
     return {
       article,

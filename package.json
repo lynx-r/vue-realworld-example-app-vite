@@ -13,6 +13,7 @@
     "vuex": "^4.0.0-rc.2"
   },
   "devDependencies": {
+    "@types/node": "^14.14.22",
     "@vitejs/plugin-vue": "^1.0.4",
     "@vue/cli-plugin-router": "^4.5.10",
     "@vue/cli-plugin-vuex": "^4.5.10",

@@ -16,11 +16,12 @@
 </template>
 
 <script lang="ts">
-import VArticlePreview from 'components/VArticlePreview.vue'
-import VPagination from 'components/VPagination.vue'
-import { FETCH_ARTICLES } from 'store/actions.type'
 import { computed, defineComponent, onMounted, ref, watch } from 'vue'
-import { useStore } from 'vuex'
+import { createNamespacedHelpers, useStore } from 'vuex'
+import { Article } from '~/components/models'
+import VArticlePreview from '~/components/VArticlePreview.vue'
+import VPagination from '~/components/VPagination.vue'
+import { FETCH_ARTICLES } from '~/store/actions.type'
 
 interface ArticleListProps {
   type?: any
@@ -33,13 +34,15 @@ interface ArticleListProps {
   articlesCount: number
 }
 
+const {mapState, mapActions, mapGetters} = createNamespacedHelpers('home')
+
 export default defineComponent({
   name: 'ArticleList',
   components: {
     VArticlePreview,
     VPagination
   },
-  setup: function (props: ArticleListProps, context) {
+  setup: function (props: ArticleListProps) {
     const {
       author,
       favorited,
@@ -48,10 +51,11 @@ export default defineComponent({
       type,
     } = props
 
+    debugger
     const store = useStore()
-    const isLoading = computed(() => store.getters.isLoading)
-    const articlesCount = computed(() => store.getters.articlesCount)
-    const articles = computed(() => store.getters.articles)
+    const isLoading = computed(() => store.getters['isLoading'])
+    const articlesCount = computed(() => store.getters['articlesCount'])
+    const articles = computed<Article[]>(() => store.getters['articles'])
 
     const currentPage = ref(1)
     const listConfig = computed(() => {
@@ -87,10 +91,7 @@ export default defineComponent({
     })
 
     function fetchArticles() {
-      console.log(context)
-      console.log('try fetch articles')
-      // todo
-      store.dispatch(FETCH_ARTICLES, listConfig)
+      store.dispatch(FETCH_ARTICLES, listConfig.value)
     }
 
     function resetPagination() {
@@ -112,7 +113,9 @@ export default defineComponent({
       fetchArticles()
     })
 
+    console.log(articles)
     return {
+      isLoading,
       articles,
       listConfig,
       pages,

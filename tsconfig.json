@@ -9,7 +9,10 @@
     "lib": ["esnext", "dom"],
     "types": ["vite/client"],
     "plugins": [],
-    "baseUrl": "src"
+    "baseUrl": "./src",
+    "paths": {
+      "~/*": ["./*"]
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
 }

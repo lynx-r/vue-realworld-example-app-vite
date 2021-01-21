@@ -1,12 +1,13 @@
-import { ArticlesService, TagsService } from 'common/api.service'
-import { FETCH_ARTICLES, FETCH_TAGS } from 'store/actions.type'
-import { FETCH_END, FETCH_START, SET_TAGS } from 'store/mutations.type'
+import { ArticlesService, TagsService } from '~/common/api.service'
+import { FETCH_ARTICLES, FETCH_TAGS } from '~/store/actions.type'
+import { FETCH_END, FETCH_START, SET_TAGS } from '~/store/mutations.type'
 import { ActionTree } from 'vuex';
-import { StateInterface } from '../index';
+import { StateInterface } from '~/store';
 import { HomeStateInterface } from './state';
 
 const actions: ActionTree<HomeStateInterface, StateInterface> = {
   [FETCH_ARTICLES]({ commit }, params) {
+    console.log('???')
     commit(FETCH_START);
     return ArticlesService.query(params.type, params.filters)
       .then(({ data }: any) => {

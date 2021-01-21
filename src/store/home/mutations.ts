@@ -1,4 +1,4 @@
-import { FETCH_END, FETCH_START, SET_TAGS, UPDATE_ARTICLE_IN_LIST } from 'store/mutations.type'
+import { FETCH_END, FETCH_START, SET_TAGS, UPDATE_ARTICLE_IN_LIST } from '~/store/mutations.type'
 import { MutationTree } from 'vuex';
 import { HomeStateInterface } from './state';
 

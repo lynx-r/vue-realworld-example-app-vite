@@ -1,18 +1,26 @@
 import { makeAxios } from '@vue-composable/axios'
-import axios from 'axios'
+import axiosLib, { AxiosInstance } from 'axios'
 import { Article } from 'components/models'
 import { API_URL } from './config'
 import JwtService from './jwt.service'
 
-const axiosClient = axios.create({baseURL: API_URL})
+const axiosClient = axiosLib.create({baseURL: API_URL})
 
-const ApiService = {
-  axios,
+interface IApiService {
+  axios: AxiosInstance
+  setHeader: () => void
+  query: (resource: string, params: any) => Promise<any>
+  get: (resource: string, slug?: string) => Promise<any>
+  post: (resource: string, params?: any) => Promise<any>
+  update: (resource: string, slug: string, params?: any) => Promise<any>
+  put: (resource: string, params?: any) => Promise<any>
+  delete: (resource: string) => Promise<any>
+}
 
-  init() {
-    const {client} = makeAxios(axiosClient)
-    this.axios = client
-  },
+const {client} = makeAxios(axiosClient)
+
+const ApiService: IApiService = {
+  axios: client,
 
   setHeader() {
     this.axios.defaults.headers.common[
@@ -20,36 +28,35 @@ const ApiService = {
       ] = `Token ${JwtService.getToken()}`
   },
 
-  query(resource: string, params: any) {
+  query(resource, params) {
     return this.axios.get(resource, params).catch(error => {
       throw new Error(`[RWV] ApiService ${error}`)
     })
   },
 
-  get(resource: string, slug = '') {
+  get(resource, slug = '') {
     return this.axios.get(`${resource}/${slug}`).catch(error => {
       throw new Error(`[RWV] ApiService ${error}`)
     })
   },
 
-  post(resource: string, params?: any) {
+  post(resource, params) {
     return this.axios.post(`${resource}`, params)
   },
 
-  update(resource: string, slug: string, params: any) {
+  update(resource, slug, params) {
     return this.axios.put(`${resource}/${slug}`, params)
   },
 
-  put(resource: string, params: any) {
+  put(resource, params) {
     return this.axios.put(`${resource}`, params)
   },
 
-  delete(resource: string) {
+  delete(resource) {
     return this.axios.delete(resource).catch(error => {
       throw new Error(`[RWV] ApiService ${error}`)
     })
   }
-
 }
 
 export default ApiService

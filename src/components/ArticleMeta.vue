@@ -35,9 +35,9 @@
 </template>
 
 <script lang="ts">
-import ArticleActions from 'components/ArticleActions.vue'
-import { Article } from 'components/models'
-import { FAVORITE_ADD, FAVORITE_REMOVE } from 'store/actions.type'
+import ArticleActions from '~/components/ArticleActions.vue'
+import { Article } from '~/components/models'
+import { FAVORITE_ADD, FAVORITE_REMOVE } from '~/store/actions.type'
 import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'

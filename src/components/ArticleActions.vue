@@ -30,14 +30,14 @@
 </template>
 
 <script lang="ts">
-import { Article } from 'components/models'
+import { Article } from '~/components/models'
 import {
   ARTICLE_DELETE,
   FAVORITE_ADD,
   FAVORITE_REMOVE,
   FETCH_PROFILE_FOLLOW,
   FETCH_PROFILE_UNFOLLOW
-} from 'store/actions.type'
+} from '~/store/actions.type'
 import { computed, defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
