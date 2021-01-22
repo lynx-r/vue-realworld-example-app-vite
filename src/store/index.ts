@@ -1,7 +1,10 @@
 import { CommitOptions, createStore, DispatchOptions, Store as VuexStore } from 'vuex'
-import { Actions } from '~/store/auth/actions'
-import { Getters } from '~/store/auth/getters'
-import { Mutations } from '~/store/auth/mutations'
+import { AuthActions } from '~/store/auth/actions'
+import { AuthGetters } from '~/store/auth/getters'
+import { AuthMutations } from '~/store/auth/mutations'
+import { HomeActions } from '~/store/home/actions'
+import { HomeGetters } from '~/store/home/getters'
+import { HomeMutations } from '~/store/home/mutations'
 import auth from './auth'
 import { AuthStateInterface } from './auth/state'
 import home from './home'
@@ -29,6 +32,10 @@ export const store = createStore({
     auth,
   },
 })
+
+type Mutations = AuthMutations & HomeMutations
+type Actions = AuthActions & HomeActions
+type Getters = AuthGetters & HomeGetters
 
 export type Store = Omit<VuexStore<StateInterface>,
   'getters' | 'commit' | 'dispatch'> & {

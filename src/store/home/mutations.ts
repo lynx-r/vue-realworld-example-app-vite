@@ -1,8 +1,17 @@
+import { Article, Tag } from '~/components/models'
+import TagList from '~/components/TagList.vue'
 import { FETCH_END, FETCH_START, SET_TAGS, UPDATE_ARTICLE_IN_LIST } from '~/store/mutations.type'
 import { MutationTree } from 'vuex';
 import { HomeStateInterface } from './state';
 
-const mutation: MutationTree<HomeStateInterface> = {
+export type HomeMutations<S = HomeStateInterface> = {
+  [FETCH_START](state: S): void
+  [FETCH_END](state: S, payload: {articles: Article[], articlesCount: number}): void
+  [SET_TAGS](state: S, tags: Tag): void
+  [UPDATE_ARTICLE_IN_LIST](state: S, data: Article): void
+}
+
+const mutation: MutationTree<HomeStateInterface> & HomeMutations = {
   [FETCH_START](state) {
     state.isLoading = true;
   },

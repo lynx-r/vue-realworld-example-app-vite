@@ -6,7 +6,7 @@ import getters from './getters'
 import mutations from './mutations'
 
 const <%= name.pascalCase %>Module: Module<<%= name.pascalCase %>StateInterface, StateInterface> = {
-  namespaced: true,
+  namespaced: false,
   actions,
   getters,
   mutations,

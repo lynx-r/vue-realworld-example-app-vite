@@ -5,6 +5,8 @@ import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';
 
+
+
 const homeModule: Module<HomeStateInterface, StateInterface> = {
   namespaced: false,
   actions,

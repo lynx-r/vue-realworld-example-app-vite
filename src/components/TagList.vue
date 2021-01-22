@@ -12,9 +12,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { Tag } from '~/components/models'
 
 interface TagListProps {
-  tags: string[]
+  tags: Tag[]
 }
 
 export default defineComponent({

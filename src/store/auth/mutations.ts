@@ -4,13 +4,13 @@ import { Errors, User } from '~/components/models'
 import { PURGE_AUTH, SET_AUTH, SET_ERROR } from '~/store/mutations.type'
 import { AuthStateInterface } from './state'
 
-export type Mutations<S = AuthStateInterface> = {
-  [SET_ERROR](state: S, error: Errors): void,
-  [SET_AUTH](state: S, user: User): void,
-  [PURGE_AUTH](state: S): void,
+export type AuthMutations<S = AuthStateInterface> = {
+  [SET_ERROR](state: S, error: Errors): void
+  [SET_AUTH](state: S, user: User): void
+  [PURGE_AUTH](state: S): void
 }
 
-const mutation: MutationTree<AuthStateInterface> & Mutations = {
+const mutation: MutationTree<AuthStateInterface> & AuthMutations = {
   [SET_ERROR](state, error) {
     state.errors = error
   },

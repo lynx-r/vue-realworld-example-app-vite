@@ -18,7 +18,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
-import { Article } from '~/components/models'
+import { Article, Filter, ListConfig } from '~/components/models'
 import VArticlePreview from '~/components/VArticlePreview.vue'
 import VPagination from '~/components/VPagination.vue'
 import { FETCH_ARTICLES } from '~/store/actions.type'
@@ -60,15 +60,12 @@ export default defineComponent({
     const articles = computed<Article[]>(() => store.getters.articles)
 
     const currentPage = ref(1)
-    const listConfig = computed(() => {
+    const listConfig = computed<ListConfig>(() => {
       const ipp = itemsPerPage?.value
       const cp = currentPage?.value
-      const filters = {
+      const filters: Filter = {
         offset: (cp - 1) * ipp,
         limit: ipp,
-        author: undefined,
-        tag: '',
-        favorited: false
       }
       if (author) {
         filters.author = author
@@ -81,7 +78,7 @@ export default defineComponent({
       }
       return {
         type: type.value,
-        ...filters
+        filters
       }
     })
 

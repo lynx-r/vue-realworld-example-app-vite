@@ -5,17 +5,17 @@ import { User } from '~/components/models'
 import { CHECK_AUTH, LOGIN, LOGOUT, REGISTER, UPDATE_USER } from '~/store/actions.type'
 import { PURGE_AUTH, SET_AUTH, SET_ERROR } from '~/store/mutations.type'
 import { StateInterface } from '..'
-import { Mutations } from './mutations'
+import { AuthMutations } from './mutations'
 import { AuthStateInterface } from './state'
 
 type AugmentedActionContext = {
-  commit<K extends keyof Mutations>(
+  commit<K extends keyof AuthMutations>(
     key: K,
-    payload?: Parameters<Mutations[K]>[1]
-  ): ReturnType<Mutations[K]>
+    payload?: Parameters<AuthMutations[K]>[1]
+  ): ReturnType<AuthMutations[K]>
 } & Omit<ActionContext<AuthStateInterface, StateInterface>, 'commit'>
 
-export interface Actions {
+export interface AuthActions {
   [LOGIN]({commit}: AugmentedActionContext, payload: User): Promise<User>
 
   [LOGOUT]({commit}: AugmentedActionContext): void
@@ -27,7 +27,7 @@ export interface Actions {
   [UPDATE_USER]({commit}: AugmentedActionContext, payload: User): Promise<User>
 }
 
-const actions: ActionTree<AuthStateInterface, StateInterface> & Actions = {
+const actions: ActionTree<AuthStateInterface, StateInterface> & AuthActions = {
   [LOGIN]({commit}, credentials) {
     return new Promise(resolve => {
       ApiService.post('users/login', {user: credentials})

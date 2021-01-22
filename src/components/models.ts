@@ -1,3 +1,5 @@
+export type Tag = string
+
 export interface Todo {
   id: number;
   content: string;
@@ -14,7 +16,7 @@ export interface Article {
   title: string
   description: string
   favorited: boolean
-  tagList: string[]
+  tagList: Tag[]
   createdAt: string
 }
 
@@ -24,6 +26,21 @@ export interface User {
   bio: string
   image: string
   password: string
+}
+
+export type ListType = 'feed' | 'all'
+
+export interface Filter {
+  offset: number
+  limit: number
+  author: User
+  tag: string
+  favorited: boolean
+}
+
+export interface ListConfig {
+  type: ListType
+  filter: Filter
 }
 
 export type Errors = {[key: string]: any} | null
