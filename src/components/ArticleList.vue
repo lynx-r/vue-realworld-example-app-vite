@@ -61,8 +61,8 @@ export default defineComponent({
 
     const currentPage = ref(1)
     const listConfig = computed(() => {
-      const ipp = itemsPerPage.value
-      const cp = currentPage.value
+      const ipp = itemsPerPage?.value
+      const cp = currentPage?.value
       const filters = {
         offset: (cp - 1) * ipp,
         limit: ipp,
