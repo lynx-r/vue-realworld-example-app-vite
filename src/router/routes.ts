@@ -4,6 +4,7 @@ const routes = [{
   children: [
     {
       path: '',
+      name: 'home',
       component: () => import('~/pages/HomeGlobal.vue')
     },
     {
