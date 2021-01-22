@@ -9,7 +9,7 @@ import { defineComponent } from 'vue'
 import ArticleList from '~/components/ArticleList'
 
 export default defineComponent({
-  name: 'RwvHomeTag',
+  name: 'HomeTag',
   components: {
     ArticleList
   },

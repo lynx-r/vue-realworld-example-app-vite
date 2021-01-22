@@ -29,13 +29,17 @@ interface ArticleListProps {
   tag?: string
   favorited?: boolean
   itemsPerPage?: number
-  isLoading: boolean
-  articles: any[]
-  articlesCount: number
 }
 
 export default defineComponent({
   name: 'ArticleList',
+  props: [
+    'author',
+    'favorited',
+    'itemsPerPage',
+    'tag',
+    'type',
+  ],
   components: {
     VArticlePreview,
     VPagination
@@ -49,6 +53,7 @@ export default defineComponent({
       type,
     } = toRefs(props)
 
+    console.log(type, itemsPerPage)
     const store = useStore()
     const isLoading = computed(() => store.getters.isLoading)
     const articlesCount = computed(() => store.getters.articlesCount)
@@ -56,9 +61,11 @@ export default defineComponent({
 
     const currentPage = ref(1)
     const listConfig = computed(() => {
+      const ipp = itemsPerPage.value
+      const cp = currentPage.value
       const filters = {
-        offset: (currentPage.value - 1) * itemsPerPage!,
-        limit: itemsPerPage,
+        offset: (cp - 1) * ipp,
+        limit: ipp,
         author: undefined,
         tag: '',
         favorited: false
@@ -73,7 +80,7 @@ export default defineComponent({
         filters.favorited = favorited
       }
       return {
-        type,
+        type: type.value,
         ...filters
       }
     })
