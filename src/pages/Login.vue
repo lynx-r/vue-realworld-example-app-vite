@@ -42,7 +42,7 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
+import { useStore } from '~/store';
 import { LOGIN } from '~/store/actions.type'
 
 export default defineComponent({

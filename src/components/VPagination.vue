@@ -16,7 +16,7 @@
 
 <script lang="ts">
 
-import { defineComponent } from 'vue'
+import { defineComponent, toRefs } from 'vue'
 
 interface VPaginationProps {
   pages: number[]
@@ -25,21 +25,22 @@ interface VPaginationProps {
 
 export default defineComponent({
   name: 'VPagination',
+  props: ['pages', 'currentPage'],
   setup(props: VPaginationProps, context) {
     const {
       currentPage,
       pages
-    } = props
+    } = toRefs(props)
 
     function changePage(goToPage: number) {
-      if (goToPage === currentPage) return
+      if (goToPage === currentPage.value) return
       context.emit('update:currentPage', goToPage)
     }
 
     function paginationClass(page: number) {
       return {
         'page-item': true,
-        active: currentPage === page
+        active: currentPage.value === page
       }
     }
 

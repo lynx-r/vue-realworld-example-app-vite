@@ -60,7 +60,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { useStore } from 'vuex';
+import { useStore } from '~/store';
 import VTag from '~/components/VTag.vue';
 import { FETCH_TAGS } from '~/store/actions.type';
 

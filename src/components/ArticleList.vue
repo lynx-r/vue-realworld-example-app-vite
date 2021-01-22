@@ -10,17 +10,17 @@
           :article="article"
           :key="article.title + index"
       />
-      <VPagination :pages="pages" :currentPage.sync="currentPage"/>
+      <VPagination :pages="pages" v-model:currentPage="currentPage"/>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, toRefs, watch } from 'vue'
-import { useStore } from 'vuex'
+import { computed, defineComponent, onMounted, ref, toRef, toRefs, watch } from 'vue'
 import { Article, Filter, ListConfig } from '~/components/models'
 import VArticlePreview from '~/components/VArticlePreview.vue'
 import VPagination from '~/components/VPagination.vue'
+import { useStore } from '~/store'
 import { FETCH_ARTICLES } from '~/store/actions.type'
 
 interface ArticleListProps {
@@ -48,12 +48,12 @@ export default defineComponent({
     const {
       author,
       favorited,
-      itemsPerPage,
       tag,
       type,
     } = toRefs(props)
 
-    console.log(type, itemsPerPage)
+    const itemsPerPage = toRef(props, 'itemsPerPage')
+
     const store = useStore()
     const isLoading = computed(() => store.getters.isLoading)
     const articlesCount = computed(() => store.getters.articlesCount)
@@ -61,24 +61,24 @@ export default defineComponent({
 
     const currentPage = ref(1)
     const listConfig = computed<ListConfig>(() => {
-      const ipp = itemsPerPage?.value
-      const cp = currentPage?.value
-      const filters: Filter = {
+      const ipp = itemsPerPage.value || 10
+      const cp = currentPage.value
+      const filter: Filter = {
         offset: (cp - 1) * ipp,
         limit: ipp,
       }
       if (author) {
-        filters.author = author
+        filter.author = author
       }
       if (tag) {
-        filters.tag = tag
+        filter.tag = tag
       }
       if (favorited) {
-        filters.favorited = favorited
+        filter.favorited = favorited
       }
       return {
         type: type.value,
-        filters
+        filter
       }
     })
 

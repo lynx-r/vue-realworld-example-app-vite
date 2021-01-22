@@ -17,10 +17,10 @@ interface IApiService {
   delete: (resource: string) => Promise<any>
 }
 
-const {client} = makeAxios(axiosClient)
+// const {client} = makeAxios(axiosClient)
 
 const ApiService: IApiService = {
-  axios: client,
+  axios: axiosClient,
 
   setHeader() {
     this.axios.defaults.headers.common[

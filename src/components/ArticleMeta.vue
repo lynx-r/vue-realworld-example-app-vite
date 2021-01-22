@@ -37,7 +37,7 @@
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
+import { useStore } from '~/store'
 import ArticleActions from '~/components/ArticleActions.vue'
 import { Article } from '~/components/models'
 import { FAVORITE_ADD, FAVORITE_REMOVE } from '~/store/actions.type'

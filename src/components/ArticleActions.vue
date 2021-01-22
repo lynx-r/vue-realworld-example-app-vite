@@ -32,7 +32,7 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
+import { useStore } from '~/store'
 import { Article } from '~/components/models'
 import {
   ARTICLE_DELETE,
