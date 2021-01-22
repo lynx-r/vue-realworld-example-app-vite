@@ -1,8 +1,11 @@
-import { createStore } from 'vuex'
-import home from './home'
+import { CommitOptions, createStore, DispatchOptions, Store as VuexStore } from 'vuex'
+import { Actions } from '~/store/auth/actions'
+import { Getters } from '~/store/auth/getters'
+import { Mutations } from '~/store/auth/mutations'
 import auth from './auth'
-import { HomeStateInterface } from './home/state'
 import { AuthStateInterface } from './auth/state'
+import home from './home'
+import { HomeStateInterface } from './home/state'
 
 // import example from './module-example';
 // import { ExampleStateInterface } from './module-example/state';
@@ -20,9 +23,32 @@ export interface StateInterface {
   auth: AuthStateInterface,
 }
 
-export default createStore({
+export const store = createStore({
   modules: {
     home,
     auth,
   },
 })
+
+export type Store = Omit<VuexStore<StateInterface>,
+  'getters' | 'commit' | 'dispatch'> & {
+  commit<K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
+    key: K,
+    payload: P,
+    options?: CommitOptions
+  ): ReturnType<Mutations[K]>
+} & {
+  dispatch<K extends keyof Actions>(
+    key: K,
+    payload: Parameters<Actions[K]>[1],
+    options?: DispatchOptions
+  ): ReturnType<Actions[K]>
+} & {
+  getters: {
+    [K in keyof Getters]: ReturnType<Getters[K]>
+  }
+}
+
+export function useStore() {
+  return store as Store
+}

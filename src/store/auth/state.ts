@@ -1,4 +1,4 @@
-import JwtService from "~/common/jwt.service";
+import JwtService from '~/common/jwt.service'
 import { Errors } from '~/components/models'
 
 export interface AuthStateInterface {
@@ -7,7 +7,7 @@ export interface AuthStateInterface {
   isAuthenticated: boolean;
 }
 
-function state (): AuthStateInterface {
+function state(): AuthStateInterface {
   return {
     errors: null,
     user: {},

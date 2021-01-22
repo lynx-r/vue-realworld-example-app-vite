@@ -5,7 +5,7 @@ import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';
 
-const exampleModule: Module<HomeStateInterface, StateInterface> = {
+const homeModule: Module<HomeStateInterface, StateInterface> = {
   namespaced: false,
   actions,
   getters,
@@ -13,4 +13,4 @@ const exampleModule: Module<HomeStateInterface, StateInterface> = {
   state
 };
 
-export default exampleModule;
+export default homeModule;
