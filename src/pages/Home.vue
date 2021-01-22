@@ -23,7 +23,6 @@
               <li class="nav-item">
                 <router-link
                     :to="{ name: 'home' }"
-                    exact
                     class="nav-link"
                     active-class="active"
                 >

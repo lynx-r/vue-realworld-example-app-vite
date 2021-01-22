@@ -1,17 +1,20 @@
-const routes = [
+import { RouteRecordRaw } from 'vue-router'
+
+const routes: RouteRecordRaw[] = [
   {
     path: '/',
+    redirect: 'home',
     component: () => import('~/pages/Home.vue'),
     children: [
       {
-        path: '',
+        path: 'home',
         name: 'home',
         component: () => import('~/pages/HomeGlobal.vue')
       },
       {
-        path: "my-feed",
-        name: "home-my-feed",
-        component: () => import("~/pages/HomeMyFeed.vue")
+        path: 'my-feed',
+        name: 'home-my-feed',
+        component: () => import('~/pages/HomeMyFeed.vue')
       },
       {
         path: 'tag/:tag',
@@ -36,9 +39,9 @@ const routes = [
     component: () => import('~/pages/Login.vue')
   },
   {
-    name: "register",
-    path: "/register",
-    component: () => import("~/pages/Register.vue")
+    name: 'register',
+    path: '/register',
+    component: () => import('~/pages/Register.vue')
   },
 ]
 export default routes

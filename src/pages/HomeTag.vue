@@ -5,7 +5,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
+import { useRoute } from 'vue-router'
 import ArticleList from '~/components/ArticleList'
 
 export default defineComponent({
@@ -13,10 +14,10 @@ export default defineComponent({
   components: {
     ArticleList
   },
-  computed: {
-    tag() {
-      return this.$route.params.tag
-    }
+  setup() {
+    const route = useRoute()
+    const tag = computed(() => route.params.tag)
+    return {tag}
   }
 })
 </script>

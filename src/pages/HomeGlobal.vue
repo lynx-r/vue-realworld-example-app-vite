@@ -1,6 +1,5 @@
 <template>
   <div class="home-global">
-
     <ArticleList type="all"/>
   </div>
 </template>
