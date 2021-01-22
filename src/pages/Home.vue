@@ -47,8 +47,8 @@
           <div class="sidebar">
             <p>Popular Tags</p>
             <div class="tag-list">
-              <RwvTag v-for="(tag, index) in tags" :name="tag" :key="index">
-              </RwvTag>
+              <VTag v-for="(tag, index) in tags" :name="tag" :key="index">
+              </VTag>
             </div>
           </div>
         </div>
@@ -57,11 +57,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { computed, defineComponent, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { mapGetters, useStore } from 'vuex';
-import VTag from '~/components/VTag';
+import { useStore } from 'vuex';
+import VTag from '~/components/VTag.vue';
 import { FETCH_TAGS } from '~/store/actions.type';
 
 export default defineComponent({
@@ -70,20 +70,16 @@ export default defineComponent({
     VTag
   },
   setup() {
-    const store = useStore()
-    const route = useRoute()
+    const store = useStore();
+    const route = useRoute();
     onMounted(() => {
-      store.dispatch(FETCH_TAGS)
-    })
+      store.dispatch(FETCH_TAGS);
+    });
     const tag = computed(() => route.params.tag);
+    const isAuthenticated = computed(() => store.getters.isAuthenticated);
+    const tags = computed(() => store.getters.tags);
 
-    computed(() => store.getters[''])
+    return {tag, tags, isAuthenticated};
   },
-  computed: {
-    ...mapGetters(['isAuthenticated', 'tags']),
-    tag() {
-      return this.$route.params.tag;
-    }
-  }
 });
 </script>

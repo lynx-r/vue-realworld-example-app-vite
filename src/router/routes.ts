@@ -1,11 +1,16 @@
 const routes = [{
   path: '/',
-  component: () => import('~/layouts/MainLayout.vue'),
+  component: () => import('~/pages/Home.vue'),
   children: [
     {
       path: '',
       name: 'home',
       component: () => import('~/pages/HomeGlobal.vue')
+    },
+    {
+      path: 'tag/:tag',
+      name: 'home-tag',
+      component: () => import('~/pages/HomeTag.vue')
     },
     {
       name: 'profile',

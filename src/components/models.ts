@@ -17,3 +17,13 @@ export interface Article {
   tagList: string[]
   createdAt: string
 }
+
+export interface User {
+  email: string
+  username: string
+  bio: string
+  image: string
+  password: string
+}
+
+export type Errors = {[key: string]: any} | null

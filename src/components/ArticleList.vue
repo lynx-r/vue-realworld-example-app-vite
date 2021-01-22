@@ -50,9 +50,9 @@ export default defineComponent({
     } = toRefs(props)
 
     const store = useStore()
-    const isLoading = computed(() => store.getters['isLoading'])
-    const articlesCount = computed(() => store.getters['articlesCount'])
-    const articles = computed<Article[]>(() => store.getters['articles'])
+    const isLoading = computed(() => store.getters.isLoading)
+    const articlesCount = computed(() => store.getters.articlesCount)
+    const articles = computed<Article[]>(() => store.getters.articles)
 
     const currentPage = ref(1)
     const listConfig = computed(() => {
