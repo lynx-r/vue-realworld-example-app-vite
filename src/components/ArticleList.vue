@@ -55,7 +55,7 @@ export default defineComponent({
     const itemsPerPage = toRef(props, 'itemsPerPage')
 
     const store = useStore()
-    const isLoading = computed(() => store.getters['auth/isAuthenticated'])
+    const isLoading = computed(() => store.getters['home/isLoading'])
     const articlesCount = computed(() => store.getters['home/articlesCount'])
     const articles = computed<Article[]>(() => store.getters['home/articles'])
 

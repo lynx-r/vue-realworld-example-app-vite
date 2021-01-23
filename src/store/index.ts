@@ -46,7 +46,6 @@ const newDispatch: Dispatch = (key, payload, options) => {
     module = 'auth/'
   }
   const nsKey = module + key
-  console.log(key, HomeActionTypes)
   return origDispatch(nsKey, payload, options)
 }
 
@@ -96,6 +95,5 @@ export type Store =
   & { getters: Getters }
 
 export function useStore() {
-  console.log(store)
   return store as Store
 }

@@ -4,6 +4,7 @@ import { ListConfig } from '~/components/models'
 import { StateInterface } from '~/store'
 import { HomeActionTypes } from '~/store/home/home-action-types'
 import { HomeMutationTypes } from '~/store/home/home-mutation-types'
+import { FETCH_END, FETCH_START, SET_TAGS } from '~/store/mutations.type'
 import { HomeMutations } from './mutations'
 import { HomeStateInterface } from './state'
 
