@@ -1,11 +1,9 @@
 import { CommitOptions, createStore, DispatchOptions, Store as VuexStore } from 'vuex'
 import { AuthActions } from '~/store/auth/actions'
-import { AuthActionTypes } from '~/store/auth/auth-action-types'
 import { AuthGetters } from '~/store/auth/getters'
 import { AuthMutations } from '~/store/auth/mutations'
 import { HomeActions } from '~/store/home/actions'
 import { HomeGetters } from '~/store/home/getters'
-import { HomeActionTypes } from '~/store/home/home-action-types'
 import { HomeMutations } from '~/store/home/mutations'
 import auth from './auth'
 import { AuthStateInterface } from './auth/state'
@@ -28,23 +26,26 @@ export interface StateInterface {
   auth: AuthStateInterface,
 }
 
+const modules = {home, auth}
+
 export const store = createStore({
-  devtools: true,
-  modules: {
-    home,
-    auth,
-  },
+  modules
 })
 
+/**
+ * overrider origin store.dispatch to add 'module/'
+ */
 const origDispatch = store.dispatch
 
 const newDispatch: Dispatch = (key, payload, options) => {
-  let module
-  if (key in HomeActionTypes) {
-    module = 'home/'
-  } else if (key in AuthActionTypes) {
-    module = 'auth/'
+  const key_module = Object
+    .entries(modules)
+    .find(([k, v]) => key in v.actionTypes && k)
+  let module = ''
+  if (!!key_module && key_module[1].namespaced) {
+    module = key_module[0] + '/'
   }
+  console.log(module)
   const nsKey = module + key
   return origDispatch(nsKey, payload, options)
 }
@@ -52,23 +53,6 @@ const newDispatch: Dispatch = (key, payload, options) => {
 store.dispatch = newDispatch
 
 type Mutations = AuthMutations & HomeMutations
-
-// type ModuleHomeActions = Omit<HomeActions, keyof HomeActions> & {
-//   [K in keyof HomeActions as `home/${K extends symbol ? never : K}`]: HomeActions[K]
-// }
-//
-// type ModuleAuthActions = Omit<AuthActions, keyof AuthActions> & {
-//   [K in keyof AuthActions as `auth/${K extends symbol ? never : K}`]: AuthActions[K]
-// }
-
-type Actions = HomeActions & AuthActions
-
-type ModuleHomeGetters = {
-  [K in keyof HomeGetters as `home/${K extends symbol ? never : K}`]: ReturnType<HomeGetters[K]>
-}
-type ModuleAuthGetters = {
-  [K in keyof AuthGetters as `auth/${K extends symbol ? never : K}`]: ReturnType<AuthGetters[K]>
-}
 
 type Commit = {
   <K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
@@ -78,6 +62,8 @@ type Commit = {
   ): ReturnType<Mutations[K]>
 }
 
+type Actions = HomeActions & AuthActions
+
 type Dispatch = {
   <K extends keyof Actions>(
     key: K,
@@ -86,7 +72,7 @@ type Dispatch = {
   ): Promise<ReturnType<Actions[K]>>
 }
 
-type Getters = ModuleHomeGetters & ModuleAuthGetters
+type Getters = HomeGetters & AuthGetters
 
 export type Store =
   Omit<VuexStore<StateInterface>, 'getters' | 'commit' | 'dispatch'>

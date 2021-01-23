@@ -29,7 +29,7 @@
       }"
     >
       <i class="ion-heart"></i>
-      <span class="counter"> {{ article.favoritesCount }} </span>
+      <span class="counter">&nbsp;{{ article.favoritesCount }}</span>
     </button>
   </div>
 </template>

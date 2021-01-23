@@ -44,7 +44,7 @@
         </div>
         <div class="col-md-3">
           <div class="sidebar">
-            <p>Popular Tag</p>
+            <p>Popular Tags</p>
             <div class="tag-list">
               <VTag v-for="(tag, index) in tags" :name="tag" :key="index">
               </VTag>

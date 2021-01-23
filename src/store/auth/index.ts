@@ -1,16 +1,20 @@
 import { Module } from 'vuex'
+import { AuthActionTypes } from '~/store/auth/auth-action-types'
 import { StateInterface } from '..'
 import state, { AuthStateInterface } from './state'
 import actions from './actions'
 import getters from './getters'
 import mutations from './mutations'
 
-const authModule: Module<AuthStateInterface, StateInterface> = {
+type ActionTypes = {actionTypes: typeof AuthActionTypes}
+
+const authModule: Module<AuthStateInterface, StateInterface> & ActionTypes = {
   namespaced: true,
   actions,
   getters,
   mutations,
-  state
+  state,
+  actionTypes: AuthActionTypes
 }
 
 export default authModule

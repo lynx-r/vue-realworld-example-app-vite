@@ -3,14 +3,18 @@ import { Article, Tag } from '~/components/models'
 import { StateInterface } from '~/store'
 import { HomeStateInterface } from './state'
 
-export type HomeGetters = {
+type Getters = {
   articlesCount(state: HomeStateInterface): number
   articles(state: HomeStateInterface): Article[]
   isLoading(state: HomeStateInterface): boolean
   tags(state: HomeStateInterface): Tag
 }
 
-const getters: GetterTree<HomeStateInterface, StateInterface> & HomeGetters = {
+export type HomeGetters = {
+  [K in keyof Getters as `home/${K extends symbol ? never : K}`]: ReturnType<Getters[K]>
+}
+
+const getters: GetterTree<HomeStateInterface, StateInterface> & Getters = {
   articlesCount (state) {
     return state.articlesCount
   },

@@ -3,12 +3,16 @@ import { User } from '~/components/models'
 import { StateInterface } from '..'
 import { AuthStateInterface } from './state'
 
-export type AuthGetters = {
+type Getters = {
   currentUser(state: AuthStateInterface): User
   isAuthenticated(state: AuthStateInterface): boolean
 }
 
-const getters: GetterTree<AuthStateInterface, StateInterface> & AuthGetters = {
+export type AuthGetters = {
+  [K in keyof Getters as `auth/${K extends symbol ? never : K}`]: ReturnType<Getters[K]>
+}
+
+const getters: GetterTree<AuthStateInterface, StateInterface> & Getters = {
   currentUser(state) {
     return state.user;
   },
