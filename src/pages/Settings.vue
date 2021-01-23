@@ -8,42 +8,42 @@
             <fieldset>
               <fieldset class="form-group">
                 <input
-                  class="form-control"
-                  type="text"
-                  v-model="currentUser.image"
-                  placeholder="URL of profile picture"
+                    class="form-control"
+                    type="text"
+                    v-model="currentUser.image"
+                    placeholder="URL of profile picture"
                 />
               </fieldset>
               <fieldset class="form-group">
                 <input
-                  class="form-control form-control-lg"
-                  type="text"
-                  v-model="currentUser.username"
-                  placeholder="Your username"
+                    class="form-control form-control-lg"
+                    type="text"
+                    v-model="currentUser.username"
+                    placeholder="Your username"
                 />
               </fieldset>
               <fieldset class="form-group">
                 <textarea
-                  class="form-control form-control-lg"
-                  rows="8"
-                  v-model="currentUser.bio"
-                  placeholder="Short bio about you"
+                    class="form-control form-control-lg"
+                    rows="8"
+                    v-model="currentUser.bio"
+                    placeholder="Short bio about you"
                 ></textarea>
               </fieldset>
               <fieldset class="form-group">
                 <input
-                  class="form-control form-control-lg"
-                  type="text"
-                  v-model="currentUser.email"
-                  placeholder="Email"
+                    class="form-control form-control-lg"
+                    type="text"
+                    v-model="currentUser.email"
+                    placeholder="Email"
                 />
               </fieldset>
               <fieldset class="form-group">
                 <input
-                  class="form-control form-control-lg"
-                  type="password"
-                  v-model="currentUser.password"
-                  placeholder="Password"
+                    class="form-control form-control-lg"
+                    type="password"
+                    v-model="currentUser.password"
+                    placeholder="Password"
                 />
               </fieldset>
               <button class="btn btn-lg btn-primary pull-xs-right">
@@ -52,7 +52,7 @@
             </fieldset>
           </form>
           <!-- Line break for logout button -->
-          <hr />
+          <hr/>
           <button @click="logout" class="btn btn-outline-danger">
             Or click here to logout.
           </button>
@@ -64,40 +64,29 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import { mapGetters } from 'vuex'
+import { useRouter } from 'vue-router'
 import { useStore } from '~/store'
-import { UPDATE_USER } from '~/store/actions.type'
 import { AuthActionTypes } from '~/store/auth/auth-action-types'
 
 export default defineComponent({
-  name: "RwvSettings",
+  name: 'RwvSettings',
   setup() {
-    const store = useStore();
+    const store = useStore()
+    const router = useRouter()
 
-    const currentUser = computed(() => store.getters['auth/currentUser']);
-    function updateSettings () {
-      store.dispatch(AuthActionTypes.UPDATE_USER, this.currentUser).then(() => {
-        // #todo, nice toast and no redirect
-        this.$router.push({ name: "home" });
-      });
+    const currentUser = computed(() => store.getters['auth/currentUser'])
 
+    function updateSettings() {
+      store.dispatch(AuthActionTypes.UPDATE_USER, currentUser.value)
+          .then(() => router.push({name: 'home'}))
     }
-  },
-  computed: {
-    ...mapGetters(["currentUser"])
-  },
-  methods: {
-    updateSettings() {
-      this.$store.dispatch(UPDATE_USER, this.currentUser).then(() => {
-        // #todo, nice toast and no redirect
-        this.$router.push({ name: "home" });
-      });
-    },
-    logout() {
-      this.$store.dispatch(AuthActionTypes.LOGOUT).then(() => {
-        this.$router.push({ name: "home" });
-      });
+
+    function logout() {
+      store.dispatch(AuthActionTypes.LOGOUT)
+          .then(() => router.push({name: 'home'}))
     }
-  }
-});
+
+    return {currentUser, logout, updateSettings}
+  },
+})
 </script>

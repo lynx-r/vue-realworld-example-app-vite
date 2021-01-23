@@ -10,7 +10,7 @@
             </router-link>
           </p>
           <ul v-if="errors" class="error-messages">
-            <li v-for="(v, k) in errors" :key="k">{{ k }} {{ v | error }}</li>
+            <li v-for="(v, k) in errors" :key="k">{{ k }} {{ error(v) }}</li>
           </ul>
           <form @submit.prevent="onSubmit(email, password)">
             <fieldset class="form-group">
@@ -42,6 +42,7 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import error from '~/common/error.filter'
 import { useStore } from '~/store'
 import { AuthActionTypes } from '~/store/auth/auth-action-types'
 
@@ -56,17 +57,18 @@ export default defineComponent({
 
     function onSubmit(email, password) {
       store
-          .dispatch(AuthActionTypes.LOGIN, {email: email.value, password: password.value})
+          .dispatch(AuthActionTypes.LOGIN, {email: email, password: password})
           .then(() => router.push({name: 'home'}))
     }
 
-    const errors = computed(() => store.state.errors)
+    const errors = computed(() => store.state.auth.errors)
 
     return {
       email,
       password,
       onSubmit,
-      errors
+      errors,
+      error
     }
   }
 })

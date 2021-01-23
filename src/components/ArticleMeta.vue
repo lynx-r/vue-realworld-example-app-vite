@@ -12,7 +12,7 @@
       >
         {{ article.author.username }}
       </router-link>
-      <span class="date">{{ article.createdAt }}</span>
+      <span class="date">{{ date(article.createdAt) }}</span>
     </div>
     <article-actions
         v-if="actions"
@@ -37,6 +37,7 @@
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
+import date from '~/common/date.filter'
 import { useStore } from '~/store'
 import ArticleActions from '~/components/ArticleActions.vue'
 import { Article } from '~/components/models'
@@ -88,7 +89,8 @@ export default defineComponent({
       article,
       actions,
       isCurrentUser,
-      toggleFavorite
+      toggleFavorite,
+      date,
     }
   }
 })

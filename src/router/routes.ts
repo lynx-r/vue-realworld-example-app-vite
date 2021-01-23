@@ -46,7 +46,7 @@ const routes: RouteRecordRaw[] = [
   {
     name: 'settings',
     path: '/settings',
-    component: () => import('~/pages/Register.vue')
+    component: () => import('~/pages/Settings.vue')
   },
   {
     name: 'article-edit',
