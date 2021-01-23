@@ -91,11 +91,9 @@ export default defineComponent({
       ].map(e => e + 1)
     })
 
-    function fetchArticles() {
-      store.dispatch(HomeActionTypes.FETCH_ARTICLES, listConfig.value)
-    }
+    const fetchArticles = () => store.dispatch(HomeActionTypes.FETCH_ARTICLES, listConfig.value)
 
-    function resetPagination() {
+    const resetPagination = () => {
       listConfig.value.offset = 0
       currentPage.value = 1
     }

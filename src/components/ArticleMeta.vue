@@ -38,9 +38,9 @@
 import { defineComponent, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import date from '~/common/date.filter'
-import { useStore } from '~/store'
 import ArticleActions from '~/components/ArticleActions.vue'
 import { Article } from '~/components/models'
+import { useStore } from '~/store'
 import { FAVORITE_ADD, FAVORITE_REMOVE } from '~/store/actions.type'
 
 interface ArticleMetaProps {
@@ -67,21 +67,18 @@ export default defineComponent({
     const router = useRouter()
     const store = useStore()
 
-    function isCurrentUser() {
-      if (currentUser.username && article.author.username) {
-        return currentUser.username === article.author.username
-      }
-      return false
-    }
+    const isCurrentUser = () =>
+        currentUser.username && article.author.username
+            ? currentUser.username === article.author.username
+            : false
 
-    function toggleFavorite() {
+    const toggleFavorite = () => {
       if (!isAuthenticated) {
         // todo
         router.push({name: 'login'})
         return
       }
       const action: string = article.favorited ? FAVORITE_REMOVE : FAVORITE_ADD
-      // todo
       store.dispatch(action, article.slug)
     }
 
