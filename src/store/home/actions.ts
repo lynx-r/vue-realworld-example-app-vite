@@ -2,7 +2,7 @@ import { ActionContext, ActionTree } from 'vuex'
 import { ArticlesService, TagsService } from '~/common/api.service'
 import { ListConfig } from '~/components/models'
 import { StateInterface } from '~/store'
-import { FETCH_ARTICLES, FETCH_TAGS } from '~/store/actions.type'
+import { HomeActionTypes } from '~/store/home/home-action-types'
 import { FETCH_END, FETCH_START, SET_TAGS } from '~/store/mutations.type'
 import { HomeMutations } from './mutations'
 import { HomeStateInterface } from './state'
@@ -15,13 +15,13 @@ type AugmentedActionContext = {
 } & Omit<ActionContext<HomeStateInterface, StateInterface>, 'commit'>
 
 export interface HomeActions {
-  [FETCH_ARTICLES]({commit}: AugmentedActionContext, payload: ListConfig): Promise<void>
+  [HomeActionTypes.FETCH_ARTICLES]({commit}: AugmentedActionContext, payload: ListConfig): Promise<void>
 
-  [FETCH_TAGS]({commit}: AugmentedActionContext): Promise<void>
+  [HomeActionTypes.FETCH_TAGS]({commit}: AugmentedActionContext): Promise<void>
 }
 
 const actions: ActionTree<HomeStateInterface, StateInterface> & HomeActions = {
-  [FETCH_ARTICLES]({commit}, params) {
+  [HomeActionTypes.FETCH_ARTICLES]({commit}, params) {
     commit(FETCH_START)
     return ArticlesService.query(params.type, params.filter)
       .then(({data}) => {
@@ -31,7 +31,7 @@ const actions: ActionTree<HomeStateInterface, StateInterface> & HomeActions = {
         throw new Error(error)
       })
   },
-  [FETCH_TAGS]({commit}) {
+  [HomeActionTypes.FETCH_TAGS]({commit}) {
     return TagsService.get()
       .then(({data}) => {
         commit(SET_TAGS, data.tags)

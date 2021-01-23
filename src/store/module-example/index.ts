@@ -1,11 +1,11 @@
 import { Module } from 'vuex'
-import { StateInterface } from '..'
-import state, { AuthStateInterface } from './state'
+import { StateInterface } from '../index'
+import state, { ExampleStateInterface } from './state'
 import actions from './actions'
 import getters from './getters'
 import mutations from './mutations'
 
-const authModule: Module<AuthStateInterface, StateInterface> = {
+const exampleModule: Module<ExampleStateInterface, StateInterface> = {
   namespaced: true,
   actions,
   getters,
@@ -13,4 +13,4 @@ const authModule: Module<AuthStateInterface, StateInterface> = {
   state
 }
 
-export default authModule
+export default exampleModule

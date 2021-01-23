@@ -75,7 +75,7 @@ export default defineComponent({
       store.dispatch(FETCH_TAGS);
     });
     const tag = computed(() => route.params.tag);
-    const isAuthenticated = computed(() => store.getters.isAuthenticated);
+    const isAuthenticated = computed(() => store.getters['auth/isAuthenticated']);
     const tags = computed(() => store.getters.tags);
 
     return {tag, tags, isAuthenticated};

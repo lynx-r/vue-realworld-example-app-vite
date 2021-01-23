@@ -21,7 +21,7 @@ import { Article, Filter, ListConfig } from '~/components/models'
 import VArticlePreview from '~/components/VArticlePreview.vue'
 import VPagination from '~/components/VPagination.vue'
 import { useStore } from '~/store'
-import { FETCH_ARTICLES } from '~/store/actions.type'
+import { HomeActionTypes } from '~/store/home/home-action-types'
 
 interface ArticleListProps {
   type?: any
@@ -55,9 +55,9 @@ export default defineComponent({
     const itemsPerPage = toRef(props, 'itemsPerPage')
 
     const store = useStore()
-    const isLoading = computed(() => store.getters.isLoading)
-    const articlesCount = computed(() => store.getters.articlesCount)
-    const articles = computed<Article[]>(() => store.getters.articles)
+    const isLoading = computed(() => store.getters['auth/isAuthenticated'])
+    const articlesCount = computed(() => store.getters['home/articlesCount'])
+    const articles = computed<Article[]>(() => store.getters['home/articles'])
 
     const currentPage = ref(1)
     const listConfig = computed<ListConfig>(() => {
@@ -92,7 +92,7 @@ export default defineComponent({
     })
 
     function fetchArticles() {
-      store.dispatch(FETCH_ARTICLES, listConfig.value)
+      store.dispatch(HomeActionTypes.FETCH_ARTICLES, listConfig.value)
     }
 
     function resetPagination() {

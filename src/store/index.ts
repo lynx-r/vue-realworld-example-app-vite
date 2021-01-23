@@ -27,35 +27,67 @@ export interface StateInterface {
 }
 
 export const store = createStore({
+  devtools: true,
   modules: {
     home,
     auth,
   },
 })
 
-type Mutations = AuthMutations & HomeMutations
-type Actions = AuthActions & HomeActions
-type Getters = AuthGetters & HomeGetters
+const origDispatch = store.dispatch
 
-export type Store = Omit<VuexStore<StateInterface>,
-  'getters' | 'commit' | 'dispatch'> & {
-  commit<K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
+const newDispatch: Dispatch = (key, payload, options) => {
+  let module
+  console.log('???', key, payload, options)
+  return origDispatch(key, payload, options)
+}
+
+store.dispatch = newDispatch
+
+type Mutations = AuthMutations & HomeMutations
+
+// type ModuleHomeActions = Omit<HomeActions, keyof HomeActions> & {
+//   [K in keyof HomeActions as `home/${K extends symbol ? never : K}`]: HomeActions[K]
+// }
+//
+// type ModuleAuthActions = Omit<AuthActions, keyof AuthActions> & {
+//   [K in keyof AuthActions as `auth/${K extends symbol ? never : K}`]: AuthActions[K]
+// }
+
+type Actions = AuthActions & HomeActions
+
+type ModuleHomeGetters = {
+  [K in keyof HomeGetters as `home/${K extends symbol ? never : K}`]: ReturnType<HomeGetters[K]>
+}
+type ModuleAuthGetters = {
+  [K in keyof AuthGetters as `auth/${K extends symbol ? never : K}`]: ReturnType<AuthGetters[K]>
+}
+
+type Commit = {
+  <K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
     key: K,
     payload: P,
     options?: CommitOptions
   ): ReturnType<Mutations[K]>
-} & {
-  dispatch<K extends keyof Actions>(
-    key: K,
-    payload?: Parameters<Actions[K]>[1],
-    options?: DispatchOptions
-  ): ReturnType<Actions[K]>
-} & {
-  getters: {
-    [K in keyof Getters]: ReturnType<Getters[K]>
-  }
 }
 
+type Dispatch = {
+  <K extends keyof Actions>(
+    key: K,
+    payload?: Parameters<Actions[K]>[1],
+    options?: DispatchOptions,
+  ): Promise<ReturnType<Actions[K]>>
+}
+
+type Getters = ModuleHomeGetters & ModuleAuthGetters
+
+export type Store =
+  Omit<VuexStore<StateInterface>, 'getters' | 'commit' | 'dispatch'>
+  & { commit: Commit }
+  & { dispatch: Dispatch }
+  & { getters: Getters }
+
 export function useStore() {
+  console.log(store)
   return store as Store
 }

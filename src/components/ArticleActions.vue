@@ -60,7 +60,7 @@ export default defineComponent({
     const store = useStore()
 
     const profile = computed(() => store.getters.profile)
-    const isAuthenticated = computed(() => store.getters.isAuthenticated)
+    const isAuthenticated = computed(() => store.getters['auth/isAuthenticated'])
 
     const editArticleLink = computed(() => ({
       name: 'article-edit',

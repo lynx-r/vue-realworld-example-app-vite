@@ -74,7 +74,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    const currentUser = computed(() => store.getters.currentUser);
+    const currentUser = computed(() => store.getters['auth/currentUser']);
     function updateSettings () {
       store.dispatch(UPDATE_USER, this.currentUser).then(() => {
         // #todo, nice toast and no redirect

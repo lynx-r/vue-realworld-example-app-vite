@@ -92,8 +92,8 @@ export default defineComponent({
   name: 'RwvHeader',
   setup() {
     const store = useStore()
-    const currentUser = computed(() => store.getters.currentUser)
-    const isAuthenticated = computed(() => store.getters.isAuthenticated)
+    const currentUser = computed(() => store.getters['auth/currentUser'])
+    const isAuthenticated = computed(() => store.getters['auth/isAuthenticated'])
 
     return {currentUser, isAuthenticated}
   }
