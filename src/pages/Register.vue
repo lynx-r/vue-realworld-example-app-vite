@@ -50,8 +50,8 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore } from '~/store';
-import { REGISTER } from '~/store/actions.type'
+import { useStore } from '~/store'
+import { AuthActionTypes } from '~/store/auth/auth-action-types'
 
 export default defineComponent({
   name: 'RwvRegister',
@@ -67,7 +67,7 @@ export default defineComponent({
 
     function onSubmit() {
       store
-          .dispatch(REGISTER, {email: email.value, username: username.value, password: password.value})
+          .dispatch(AuthActionTypes.REGISTER, {email: email.value, username: username.value, password: password.value})
           .then(() => router.push({name: 'home'}))
     }
 

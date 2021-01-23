@@ -1,29 +1,28 @@
+import { MutationTree } from 'vuex'
 import { Article, Tag } from '~/components/models'
-import TagList from '~/components/TagList.vue'
-import { FETCH_END, FETCH_START, SET_TAGS, UPDATE_ARTICLE_IN_LIST } from '~/store/mutations.type'
-import { MutationTree } from 'vuex';
-import { HomeStateInterface } from './state';
+import { HomeMutationTypes } from '~/store/home/home-mutation-types'
+import { HomeStateInterface } from './state'
 
 export type HomeMutations<S = HomeStateInterface> = {
-  [FETCH_START](state: S): void
-  [FETCH_END](state: S, payload: {articles: Article[], articlesCount: number}): void
-  [SET_TAGS](state: S, tags: Tag): void
-  [UPDATE_ARTICLE_IN_LIST](state: S, data: Article): void
+  [HomeMutationTypes.FETCH_START](state: S): void
+  [HomeMutationTypes.FETCH_END](state: S, payload: {articles: Article[], articlesCount: number}): void
+  [HomeMutationTypes.SET_TAGS](state: S, tags: Tag): void
+  [HomeMutationTypes.UPDATE_ARTICLE_IN_LIST](state: S, data: Article): void
 }
 
 const mutation: MutationTree<HomeStateInterface> & HomeMutations = {
-  [FETCH_START](state) {
+  [HomeMutationTypes.FETCH_START](state) {
     state.isLoading = true;
   },
-  [FETCH_END](state, { articles, articlesCount }) {
+  [HomeMutationTypes.FETCH_END](state, { articles, articlesCount }) {
     state.articles = articles;
     state.articlesCount = articlesCount;
     state.isLoading = false;
   },
-  [SET_TAGS](state, tags) {
+  [HomeMutationTypes.SET_TAGS](state, tags) {
     state.tags = tags;
   },
-  [UPDATE_ARTICLE_IN_LIST](state, data) {
+  [HomeMutationTypes.UPDATE_ARTICLE_IN_LIST](state, data) {
     state.articles = state.articles.map(article => {
       if (article.slug !== data.slug) {
         return article;

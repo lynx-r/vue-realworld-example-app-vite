@@ -63,11 +63,11 @@
 </template>
 
 <script lang="ts">
-import { AuthStateInterface } from 'src/store/auth/state'
-import { computed, defineComponent } from 'vue';
-import { mapGetters } from 'vuex';
+import { computed, defineComponent } from 'vue'
+import { mapGetters } from 'vuex'
 import { useStore } from '~/store'
-import { LOGOUT, UPDATE_USER } from "~/store/actions.type";
+import { UPDATE_USER } from '~/store/actions.type'
+import { AuthActionTypes } from '~/store/auth/auth-action-types'
 
 export default defineComponent({
   name: "RwvSettings",
@@ -76,7 +76,7 @@ export default defineComponent({
 
     const currentUser = computed(() => store.getters['auth/currentUser']);
     function updateSettings () {
-      store.dispatch(UPDATE_USER, this.currentUser).then(() => {
+      store.dispatch(AuthActionTypes.UPDATE_USER, this.currentUser).then(() => {
         // #todo, nice toast and no redirect
         this.$router.push({ name: "home" });
       });
@@ -94,7 +94,7 @@ export default defineComponent({
       });
     },
     logout() {
-      this.$store.dispatch(LOGOUT).then(() => {
+      this.$store.dispatch(AuthActionTypes.LOGOUT).then(() => {
         this.$router.push({ name: "home" });
       });
     }

@@ -2,8 +2,8 @@ import { ActionContext, ActionTree } from 'vuex'
 import ApiService from '~/common/api.service'
 import JwtService from '~/common/jwt.service'
 import { User } from '~/components/models'
-import { CHECK_AUTH, LOGIN, LOGOUT, REGISTER, UPDATE_USER } from '~/store/actions.type'
-import { PURGE_AUTH, SET_AUTH, SET_ERROR } from '~/store/mutations.type'
+import { AuthActionTypes } from '~/store/auth/auth-action-types'
+import { AuthMutationTypes } from '~/store/auth/auth-mutation-types'
 import { StateInterface } from '..'
 import { AuthMutations } from './mutations'
 import { AuthStateInterface } from './state'
@@ -16,61 +16,61 @@ type AugmentedActionContext = {
 } & Omit<ActionContext<AuthStateInterface, StateInterface>, 'commit'>
 
 export interface AuthActions {
-  [LOGIN]({commit}: AugmentedActionContext, payload: User): Promise<User>
+  [AuthActionTypes.LOGIN]({commit}: AugmentedActionContext, payload: User): Promise<User>
 
-  [LOGOUT]({commit}: AugmentedActionContext): void
+  [AuthActionTypes.LOGOUT]({commit}: AugmentedActionContext): void
 
-  [REGISTER]({commit}: AugmentedActionContext, payload: User): Promise<User>
+  [AuthActionTypes.REGISTER]({commit}: AugmentedActionContext, payload: User): Promise<User>
 
-  [CHECK_AUTH]({commit}: AugmentedActionContext): void
+  [AuthActionTypes.CHECK_AUTH]({commit}: AugmentedActionContext): void
 
-  [UPDATE_USER]({commit}: AugmentedActionContext, payload: User): Promise<User>
+  [AuthActionTypes.UPDATE_USER]({commit}: AugmentedActionContext, payload: User): Promise<User>
 }
 
 const actions: ActionTree<AuthStateInterface, StateInterface> & AuthActions = {
-  [LOGIN]({commit}, credentials) {
+  [AuthActionTypes.LOGIN]({commit}, credentials) {
     return new Promise(resolve => {
       ApiService.post('users/login', {user: credentials})
         .then(({data}) => {
-          commit(SET_AUTH, data.user)
+          commit(AuthMutationTypes.SET_AUTH, data.user)
           resolve(data)
         })
         .catch(({response}) => {
-          commit(SET_ERROR, response.data.errors)
+          commit(AuthMutationTypes.SET_ERROR, response.data.errors)
         })
     })
   },
-  [LOGOUT]({commit}) {
-    commit(PURGE_AUTH)
+  [AuthActionTypes.LOGOUT]({commit}) {
+    commit(AuthMutationTypes.PURGE_AUTH)
   },
-  [REGISTER]({commit}, credentials) {
+  [AuthActionTypes.REGISTER]({commit}, credentials) {
     return new Promise((resolve, reject) => {
       ApiService.post('users', {user: credentials})
         .then(({data}) => {
-          commit(SET_AUTH, data.user)
+          commit(AuthMutationTypes.SET_AUTH, data.user)
           resolve(data)
         })
         .catch(({response}) => {
-          commit(SET_ERROR, response.data.errors)
+          commit(AuthMutationTypes.SET_ERROR, response.data.errors)
           reject(response)
         })
     })
   },
-  [CHECK_AUTH](context) {
+  [AuthActionTypes.CHECK_AUTH](context) {
     if (JwtService.getToken()) {
       ApiService.setHeader()
       ApiService.get('user')
         .then(({data}) => {
-          context.commit(SET_AUTH, data.user)
+          context.commit(AuthMutationTypes.SET_AUTH, data.user)
         })
         .catch(({response}) => {
-          context.commit(SET_ERROR, response.data.errors)
+          context.commit(AuthMutationTypes.SET_ERROR, response.data.errors)
         })
     } else {
-      context.commit(PURGE_AUTH)
+      context.commit(AuthMutationTypes.PURGE_AUTH)
     }
   },
-  [UPDATE_USER]({commit}, payload) {
+  [AuthActionTypes.UPDATE_USER]({commit}, payload) {
     const {email, username, password, image, bio} = payload
     const user = {
       email,
@@ -83,7 +83,7 @@ const actions: ActionTree<AuthStateInterface, StateInterface> & AuthActions = {
     }
 
     return ApiService.put('user', user).then(({data}) => {
-      commit(SET_AUTH, data.user)
+      commit(AuthMutationTypes.SET_AUTH, data.user)
       return data
     })
   }

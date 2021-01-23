@@ -1,26 +1,26 @@
 import { MutationTree } from 'vuex'
 import JwtService from '~/common/jwt.service'
 import { Errors, User } from '~/components/models'
-import { PURGE_AUTH, SET_AUTH, SET_ERROR } from '~/store/mutations.type'
+import { AuthMutationTypes } from '~/store/auth/auth-mutation-types'
 import { AuthStateInterface } from './state'
 
 export type AuthMutations<S = AuthStateInterface> = {
-  [SET_ERROR](state: S, error: Errors): void
-  [SET_AUTH](state: S, user: User): void
-  [PURGE_AUTH](state: S): void
+  [AuthMutationTypes.SET_ERROR](state: S, error: Errors): void
+  [AuthMutationTypes.SET_AUTH](state: S, user: User): void
+  [AuthMutationTypes.PURGE_AUTH](state: S): void
 }
 
 const mutation: MutationTree<AuthStateInterface> & AuthMutations = {
-  [SET_ERROR](state, error) {
+  [AuthMutationTypes.SET_ERROR](state, error) {
     state.errors = error
   },
-  [SET_AUTH](state, user) {
+  [AuthMutationTypes.SET_AUTH](state, user) {
     state.isAuthenticated = true
     state.user = user
     state.errors = {}
     JwtService.saveToken(state.user.token)
   },
-  [PURGE_AUTH](state) {
+  [AuthMutationTypes.PURGE_AUTH](state) {
     state.isAuthenticated = false
     state.user = {}
     state.errors = {}

@@ -1,9 +1,11 @@
 import { CommitOptions, createStore, DispatchOptions, Store as VuexStore } from 'vuex'
 import { AuthActions } from '~/store/auth/actions'
+import { AuthActionTypes } from '~/store/auth/auth-action-types'
 import { AuthGetters } from '~/store/auth/getters'
 import { AuthMutations } from '~/store/auth/mutations'
 import { HomeActions } from '~/store/home/actions'
 import { HomeGetters } from '~/store/home/getters'
+import { HomeActionTypes } from '~/store/home/home-action-types'
 import { HomeMutations } from '~/store/home/mutations'
 import auth from './auth'
 import { AuthStateInterface } from './auth/state'
@@ -38,8 +40,14 @@ const origDispatch = store.dispatch
 
 const newDispatch: Dispatch = (key, payload, options) => {
   let module
-  console.log('???', key, payload, options)
-  return origDispatch(key, payload, options)
+  if (key in HomeActionTypes) {
+    module = 'home/'
+  } else if (key in AuthActionTypes) {
+    module = 'auth/'
+  }
+  const nsKey = module + key
+  console.log(key, HomeActionTypes)
+  return origDispatch(nsKey, payload, options)
 }
 
 store.dispatch = newDispatch
@@ -54,7 +62,7 @@ type Mutations = AuthMutations & HomeMutations
 //   [K in keyof AuthActions as `auth/${K extends symbol ? never : K}`]: AuthActions[K]
 // }
 
-type Actions = AuthActions & HomeActions
+type Actions = HomeActions & AuthActions
 
 type ModuleHomeGetters = {
   [K in keyof HomeGetters as `home/${K extends symbol ? never : K}`]: ReturnType<HomeGetters[K]>

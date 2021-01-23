@@ -42,8 +42,8 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore } from '~/store';
-import { LOGIN } from '~/store/actions.type'
+import { useStore } from '~/store'
+import { AuthActionTypes } from '~/store/auth/auth-action-types'
 
 export default defineComponent({
   name: 'RwvLogin',
@@ -56,7 +56,7 @@ export default defineComponent({
 
     function onSubmit(email, password) {
       store
-          .dispatch(LOGIN, {email: email.value, password: password.value})
+          .dispatch(AuthActionTypes.LOGIN, {email: email.value, password: password.value})
           .then(() => router.push({name: 'home'}))
     }
 

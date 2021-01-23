@@ -3,7 +3,7 @@ import { ArticlesService, TagsService } from '~/common/api.service'
 import { ListConfig } from '~/components/models'
 import { StateInterface } from '~/store'
 import { HomeActionTypes } from '~/store/home/home-action-types'
-import { FETCH_END, FETCH_START, SET_TAGS } from '~/store/mutations.type'
+import { HomeMutationTypes } from '~/store/home/home-mutation-types'
 import { HomeMutations } from './mutations'
 import { HomeStateInterface } from './state'
 
@@ -22,10 +22,10 @@ export interface HomeActions {
 
 const actions: ActionTree<HomeStateInterface, StateInterface> & HomeActions = {
   [HomeActionTypes.FETCH_ARTICLES]({commit}, params) {
-    commit(FETCH_START)
+    commit(HomeMutationTypes.FETCH_START)
     return ArticlesService.query(params.type, params.filter)
       .then(({data}) => {
-        commit(FETCH_END, data)
+        commit(HomeMutationTypes.FETCH_END, data)
       })
       .catch((error: any) => {
         throw new Error(error)
@@ -34,7 +34,7 @@ const actions: ActionTree<HomeStateInterface, StateInterface> & HomeActions = {
   [HomeActionTypes.FETCH_TAGS]({commit}) {
     return TagsService.get()
       .then(({data}) => {
-        commit(SET_TAGS, data.tags)
+        commit(HomeMutationTypes.SET_TAGS, data.tags)
       })
       .catch((error: any) => {
         throw new Error(error)

@@ -62,6 +62,7 @@ import { useRoute } from 'vue-router';
 import { useStore } from '~/store';
 import VTag from '~/components/VTag.vue';
 import { FETCH_TAGS } from '~/store/actions.type';
+import { HomeActionTypes } from '~/store/home/home-action-types'
 
 export default defineComponent({
   name: 'Home',
@@ -72,7 +73,7 @@ export default defineComponent({
     const store = useStore();
     const route = useRoute();
     onMounted(() => {
-      store.dispatch(FETCH_TAGS);
+      store.dispatch(HomeActionTypes.FETCH_TAGS);
     });
     const tag = computed(() => route.params.tag);
     const isAuthenticated = computed(() => store.getters['auth/isAuthenticated']);

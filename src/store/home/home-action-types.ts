@@ -1,4 +1,4 @@
 export enum HomeActionTypes {
-  FETCH_ARTICLES = 'fetchArticles',
-  FETCH_TAGS = 'fetchTags'
+  FETCH_ARTICLES = 'FETCH_ARTICLES',
+  FETCH_TAGS = 'FETCH_TAGS'
 }
