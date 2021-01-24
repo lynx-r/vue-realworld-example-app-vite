@@ -75,8 +75,6 @@ export default defineComponent({
       store.dispatch(HomeActionTypes.FETCH_TAGS);
     });
 
-    setTimeout(() => store.dispatch(TestGenActionTypes.SOME_ACTION, false), 2000)
-
     const tag = computed(() => route.params.tag);
     const isAuthenticated = computed(() => store.getters['auth/isAuthenticated']);
     const tags = computed(() => store.getters['home/tags']);
