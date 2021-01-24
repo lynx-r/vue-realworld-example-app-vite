@@ -7,7 +7,7 @@ type Getters = {
   articlesCount(state: HomeStateInterface): number
   articles(state: HomeStateInterface): Article[]
   isLoading(state: HomeStateInterface): boolean
-  tags(state: HomeStateInterface): Tag
+  tags(state: HomeStateInterface): Tag[]
 }
 
 export type HomeGetters = {
