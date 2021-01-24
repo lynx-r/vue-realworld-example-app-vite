@@ -1,16 +1,20 @@
 import { Module } from 'vuex'
 import { StateInterface } from '..'
-import state, { <%= name.pascalCase %>StateInterface } from './state'
 import actions from './actions'
+import { <%= name.pascalCase %>ActionTypes } from './<%= name.kebabCase %>-action-types'
 import getters from './getters'
 import mutations from './mutations'
+import state, { <%= name.pascalCase %>StateInterface } from './state'
 
-const <%= name.pascalCase %>Module: Module<<%= name.pascalCase %>StateInterface, StateInterface> = {
-  namespaced: false,
+type ActionTypes = { actionTypes: typeof <%= name.pascalCase %>ActionTypes }
+
+const <%= name.camelCase %>: Module<<%= name.pascalCase %>StateInterface, StateInterface> & ActionTypes = {
+  namespaced: true,
   actions,
   getters,
   mutations,
-  state
+  state,
+  actionTypes: <%= name.pascalCase %>ActionTypes
 }
 
-export default <%= name.pascalCase %>Module
+export default <%= name.camelCase %>

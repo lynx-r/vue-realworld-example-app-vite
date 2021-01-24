@@ -46,6 +46,8 @@ module.exports = {
             template: {
                 // eslint-disable-next-line no-template-curly-in-string
                 ['./src/store/${name.kebabCase}/actions.ts']: 'module-example/actions.ts',
+                ['./src/store/${name.kebabCase}/${name.kebabCase}-action-types.ts']: 'module-example/example-action-types.ts',
+                ['./src/store/${name.kebabCase}/${name.kebabCase}-mutation-types.ts']: 'module-example/example-mutation-types.ts',
                 ['./src/store/${name.kebabCase}/getters.ts']: 'module-example/getters.ts',
                 ['./src/store/${name.kebabCase}/index.ts']: 'module-example/index.ts',
                 ['./src/store/${name.kebabCase}/mutations.ts']: 'module-example/mutations.ts',

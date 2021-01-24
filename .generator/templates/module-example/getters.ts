@@ -2,8 +2,17 @@ import { GetterTree } from 'vuex'
 import { StateInterface } from '..'
 import { <%= name.pascalCase %>StateInterface } from './state'
 
-const getters: GetterTree<<%= name.pascalCase %>StateInterface, StateInterface> = {
-  someAction (/* context */) {
+type Getters = {
+  someAction(state: <%= name.pascalCase %>StateInterface): boolean
+}
+
+export type <%= name.pascalCase %>Getters = {
+  [K in keyof Getters as `<%= name.camelCase %>/${K extends symbol ? never : K}`]: ReturnType<Getters[K]>
+}
+
+const getters: GetterTree<<%= name.pascalCase %>StateInterface, StateInterface> & Getters = {
+  someAction(state) {
+    return state.prop
     // your code
   }
 }

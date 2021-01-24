@@ -6,7 +6,7 @@ import { HomeStateInterface } from './state'
 export type HomeMutations<S = HomeStateInterface> = {
   [HomeMutationTypes.FETCH_START](state: S): void
   [HomeMutationTypes.FETCH_END](state: S, payload: {articles: Article[], articlesCount: number}): void
-  [HomeMutationTypes.SET_TAGS](state: S, tags: Tag): void
+  [HomeMutationTypes.SET_TAGS](state: S, tags: Tag[]): void
   [HomeMutationTypes.UPDATE_ARTICLE_IN_LIST](state: S, data: Article): void
 }
 

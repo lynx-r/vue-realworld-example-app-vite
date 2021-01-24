@@ -5,6 +5,10 @@ import { AuthMutations } from '~/store/auth/mutations'
 import { HomeActions } from '~/store/home/actions'
 import { HomeGetters } from '~/store/home/getters'
 import { HomeMutations } from '~/store/home/mutations'
+import testGen from '~/store/test-gen'
+import { TestGenActions } from '~/store/test-gen/actions'
+import { TestGenGetters } from '~/store/test-gen/getters'
+import { TestGenMutations } from '~/store/test-gen/mutations'
 import auth from './auth'
 import { AuthStateInterface } from './auth/state'
 import home from './home'
@@ -26,7 +30,7 @@ export interface StateInterface {
   auth: AuthStateInterface,
 }
 
-const modules = {home, auth}
+const modules = {home, auth, testGen}
 
 export const store = createStore({
   modules
@@ -51,8 +55,12 @@ const newDispatch: Dispatch = (key, payload, options) => {
 }
 
 store.dispatch = newDispatch
+// end newDispatch
 
-type Mutations = AuthMutations & HomeMutations
+/**
+ * Must be augmented with every module **Mutations**
+ */
+type Mutations = AuthMutations & HomeMutations & TestGenMutations
 
 type Commit = {
   <K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
@@ -62,7 +70,10 @@ type Commit = {
   ): ReturnType<Mutations[K]>
 }
 
-type Actions = HomeActions & AuthActions
+/**
+ * Must be augmented with every module **Actions**
+ */
+type Actions = HomeActions & AuthActions & TestGenActions
 
 type Dispatch = {
   <K extends keyof Actions>(
@@ -72,7 +83,10 @@ type Dispatch = {
   ): Promise<ReturnType<Actions[K]>>
 }
 
-type Getters = HomeGetters & AuthGetters
+/**
+ * Must be augmented with every module **Getters**
+ */
+type Getters = HomeGetters & AuthGetters & TestGenGetters
 
 export type Store =
   Omit<VuexStore<StateInterface>, 'getters' | 'commit' | 'dispatch'>

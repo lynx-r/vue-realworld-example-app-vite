@@ -1,10 +1,10 @@
-import { Module } from 'vuex';
-import { StateInterface } from '~/store';
+import { Module } from 'vuex'
+import { StateInterface } from '~/store'
 import { HomeActionTypes } from '~/store/home/home-action-types'
-import state, { HomeStateInterface } from './state';
-import actions from './actions';
-import getters from './getters';
-import mutations from './mutations';
+import actions from './actions'
+import getters from './getters'
+import mutations from './mutations'
+import state, { HomeStateInterface } from './state'
 
 type ActionTypes = {actionTypes: typeof HomeActionTypes}
 
