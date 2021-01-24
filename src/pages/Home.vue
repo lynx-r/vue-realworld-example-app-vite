@@ -4,6 +4,7 @@
       <div class="container">
         <h1 class="logo-font">conduit</h1>
         <p>A place to share your knowledge.</p>
+        {{prop}}
       </div>
     </div>
     <div class="container page">
@@ -57,12 +58,12 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
-import { useStore } from '~/store';
-import VTag from '~/components/VTag.vue';
-import { FETCH_TAGS } from '~/store/actions.type';
+import { computed, defineComponent, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import VTag from '~/components/VTag.vue'
+import { useStore } from '~/store'
 import { HomeActionTypes } from '~/store/home/home-action-types'
+import { TestGenActionTypes } from '~/store/test-gen/test-gen-action-types'
 
 export default defineComponent({
   name: 'Home',
@@ -73,13 +74,18 @@ export default defineComponent({
     const store = useStore();
     const route = useRoute();
     onMounted(() => {
+      store.dispatch(TestGenActionTypes.SOME_ACTION, true)
       store.dispatch(HomeActionTypes.FETCH_TAGS);
     });
+
+    setTimeout(() => store.dispatch(TestGenActionTypes.SOME_ACTION, false), 2000)
+
     const tag = computed(() => route.params.tag);
     const isAuthenticated = computed(() => store.getters['auth/isAuthenticated']);
     const tags = computed(() => store.getters['home/tags']);
+    const prop = computed(() => store.getters['testGen/someAction']);
 
-    return {tag, tags, isAuthenticated};
+    return {tag, tags, isAuthenticated, prop};
   },
 });
 </script>
