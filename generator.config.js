@@ -1,26 +1,6 @@
 module.exports = {
     templates: [
         {
-            name: 'component',
-            label: 'Component',
-            template: {
-                // eslint-disable-next-line no-template-curly-in-string
-                ['./src/components/${name.pascalCase}.vue']: 'component.vue'
-            },
-            renameFile: true, // Rename file question
-            prompts: [
-                // Custom Questions
-                {
-                    type: 'confirm',
-                    name: 'scoped',
-                    message: 'This component with scoped styling?',
-                    default: true,
-                    group: 'component',
-                    when: answers => answers.type === 'component',
-                },
-            ]
-        },
-        {
             name: 'composition',
             label: 'Composition',
             template: {
@@ -40,6 +20,16 @@ module.exports = {
                 },
             ]
         },
+      {
+            name: 'page',
+            label: 'Page',
+            template: {
+                // eslint-disable-next-line no-template-curly-in-string
+                ['./src/pages/${name.pascalCase}.vue']: 'page.vue'
+            },
+            renameFile: true, // Rename file question
+            prompts: []
+        },
         {
             name: 'module',
             label: 'Module',
@@ -56,5 +46,25 @@ module.exports = {
             renameFile: true, // Rename file question
             prompts: []
         },
+      {
+        name: 'component',
+        label: 'Component',
+        template: {
+          // eslint-disable-next-line no-template-curly-in-string
+          ['./src/components/${name.pascalCase}.vue']: 'component.vue'
+        },
+        renameFile: true, // Rename file question
+        prompts: [
+          // Custom Questions
+          {
+            type: 'confirm',
+            name: 'scoped',
+            message: 'This component with scoped styling?',
+            default: true,
+            group: 'component',
+            when: answers => answers.type === 'component',
+          },
+        ]
+      },
     ]
 };
