@@ -10,14 +10,16 @@ export interface Meta {
 }
 
 export interface Article {
-  favoritesCount: number
-  author: any
-  slug: string
+  author: User
   title: string
   description: string
-  favorited: boolean
+  body: string
   tagList: Tag[]
-  createdAt: string
+  favoritesCount?: number
+  slug?: string
+  comment?: string
+  favorited?: boolean
+  createdAt?: string
 }
 
 export interface User {
@@ -45,3 +47,5 @@ export interface ListConfig {
 }
 
 export type Errors = {[key: string]: any} | null
+
+export type Comment = string

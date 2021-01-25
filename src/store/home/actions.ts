@@ -1,6 +1,6 @@
 import { ActionContext, ActionTree } from 'vuex'
 import { ArticlesService, TagsService } from '~/common/api.service'
-import { ListConfig } from '~/components/models'
+import { Article, ListConfig } from '~/components/models'
 import { StateInterface } from '~/store'
 import { HomeActionTypes } from '~/store/home/home-action-types'
 import { HomeMutationTypes } from '~/store/home/home-mutation-types'
@@ -15,9 +15,11 @@ type AugmentedActionContext = {
 } & Omit<ActionContext<HomeStateInterface, StateInterface>, 'commit'>
 
 export interface HomeActions {
-  [HomeActionTypes.FETCH_ARTICLES]({commit}: AugmentedActionContext, payload: ListConfig): Promise<void>
+  [HomeActionTypes.FETCH_ARTICLES](context: AugmentedActionContext, payload: ListConfig): Promise<void>
 
-  [HomeActionTypes.FETCH_TAGS]({commit}: AugmentedActionContext): Promise<void>
+  [HomeActionTypes.FETCH_TAGS](context: AugmentedActionContext): Promise<void>
+
+  [HomeActionTypes.UPDATE_ARTICLE_IN_LIST](context: AugmentedActionContext, payload: Article): void
 }
 
 const actions: ActionTree<HomeStateInterface, StateInterface> & HomeActions = {
@@ -39,6 +41,19 @@ const actions: ActionTree<HomeStateInterface, StateInterface> & HomeActions = {
       .catch((error: any) => {
         throw new Error(error)
       })
+  },
+  [HomeActionTypes.UPDATE_ARTICLE_IN_LIST]({state}, data) {
+    state.articles = state.articles.map(article => {
+      if (article.slug !== data.slug) {
+        return article
+      }
+      // We could just return data, but it seems dangerous to
+      // mix the results of different api calls, so we
+      // protect ourselves by copying the information.
+      article.favorited = data.favorited
+      article.favoritesCount = data.favoritesCount
+      return article
+    })
   }
 }
 

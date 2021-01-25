@@ -60,10 +60,16 @@ const routes: RouteRecordRaw[] = [
     component: () => import('~/pages/Settings.vue')
   },
   {
-    name: 'article-edit',
-    path: '/editor/:slug?',
+    name: "article",
+    path: "/articles/:slug",
+    component: () => import("@/views/Article"),
+    props: true
+  },
+  {
+    name: "article-edit",
+    path: "/editor/:slug?",
     props: true,
-    component: () => import('~/pages/Register.vue')
+    component: () => import("@/views/ArticleEdit")
   }
-]
+  ]
 export default routes
