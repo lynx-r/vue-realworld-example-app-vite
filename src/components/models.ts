@@ -22,6 +22,7 @@ export interface Article {
 
 export interface User {
   email: string
+  following: boolean
   username: string
   bio: string
   image: string

@@ -5,6 +5,11 @@ import { AuthMutations } from '~/store/auth/mutations'
 import { HomeActions } from '~/store/home/actions'
 import { HomeGetters } from '~/store/home/getters'
 import { HomeMutations } from '~/store/home/mutations'
+import profile from '~/store/profile'
+import { ProfileActions } from '~/store/profile/actions'
+import { ProfileGetters } from '~/store/profile/getters'
+import { ProfileMutations } from '~/store/profile/mutations'
+import { ProfileStateInterface } from '~/store/profile/state'
 import auth from './auth'
 import { AuthStateInterface } from './auth/state'
 import home from './home'
@@ -24,9 +29,10 @@ export interface StateInterface {
   // Declared as unknown to avoid linting issue. Best to strongly type as per the line above.
   home: HomeStateInterface,
   auth: AuthStateInterface,
+  profile: ProfileStateInterface,
 }
 
-const modules = {home, auth}
+const modules = {home, auth, profile}
 
 export const store = createStore({
   modules
@@ -45,7 +51,6 @@ const newDispatch: Dispatch = (key, payload, options) => {
   if (!!key_module && key_module[1].namespaced) {
     module = key_module[0] + '/'
   }
-  console.log(module)
   const nsKey = module + key
   return origDispatch(nsKey, payload, options)
 }
@@ -56,7 +61,7 @@ store.dispatch = newDispatch
 /**
  * Must be augmented with every module **Mutations**
  */
-type Mutations = AuthMutations & HomeMutations
+type Mutations = AuthMutations & HomeMutations & ProfileMutations
 
 type Commit = {
   <K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
@@ -69,7 +74,7 @@ type Commit = {
 /**
  * Must be augmented with every module **Actions**
  */
-type Actions = HomeActions & AuthActions
+type Actions = HomeActions & AuthActions & ProfileActions
 
 type Dispatch = {
   <K extends keyof Actions>(
@@ -82,7 +87,7 @@ type Dispatch = {
 /**
  * Must be augmented with every module **Getters**
  */
-type Getters = HomeGetters & AuthGetters
+type Getters = HomeGetters & AuthGetters & ProfileGetters
 
 export type Store =
   Omit<VuexStore<StateInterface>, 'getters' | 'commit' | 'dispatch'>

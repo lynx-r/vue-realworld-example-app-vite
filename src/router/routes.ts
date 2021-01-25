@@ -22,9 +22,20 @@ const routes: RouteRecordRaw[] = [
         component: () => import('~/pages/HomeTag.vue')
       },
       {
-        name: 'profile',
-        path: 'profile',
-        component: () => import('~/pages/HomeGlobal.vue')
+        path: '/@:username',
+        component: () => import('~/pages/Profile.vue'),
+        children: [
+          {
+            path: '',
+            name: 'profile',
+            component: () => import('~/pages/Profile.vue')
+          },
+          {
+            name: 'profile-favorites',
+            path: 'favorites',
+            component: () => import('~/pages/Profile.vue')
+          }
+        ]
       },
       {
         name: 'article',

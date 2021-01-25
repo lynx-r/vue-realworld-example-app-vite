@@ -1,5 +1,5 @@
 export interface <%= name.pascalCase %>StateInterface {
-  prop: boolean;
+  prop: boolean
 }
 
 function state (): <%= name.pascalCase %>StateInterface {
