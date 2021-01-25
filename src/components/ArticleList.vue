@@ -76,8 +76,9 @@ export default defineComponent({
       if (favorited) {
         filter.favorited = favorited
       }
+      const typeV = type?.value || 'all'
       return {
-        type: type.value,
+        type: typeV,
         filter
       }
     })

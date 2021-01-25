@@ -47,7 +47,6 @@
                 <router-link
                     class="nav-link"
                     active-class="active"
-                    exact
                     :to="{ name: 'profile' }"
                 >
                   My Articles
@@ -57,7 +56,6 @@
                 <router-link
                     class="nav-link"
                     active-class="active"
-                    exact
                     :to="{ name: 'profile-favorites' }"
                 >
                   Favorited Articles
@@ -74,7 +72,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from '~/store'
 import { ProfileActionTypes } from '~/store/profile/profile-action-types'
 
@@ -84,6 +82,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const route = useRoute()
+    const router = useRouter()
 
     onMounted(() => store.dispatch(ProfileActionTypes.FETCH_PROFILE, route.params))
 
@@ -107,8 +106,8 @@ export default defineComponent({
       store.dispatch(ProfileActionTypes.FETCH_PROFILE_UNFOLLOW, route.params);
     }
 
-    watch(() => route.params, ({to}) => {
-      store.dispatch(ProfileActionTypes.FETCH_PROFILE, to.params)
+    watch(() => route.params, (params) => {
+      store.dispatch(ProfileActionTypes.FETCH_PROFILE, params)
     })
 
     return {currentUser, isAuthenticated, profile, isCurrentUser, follow, unfollow}

@@ -9,7 +9,9 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: '<%= name.pascalCase %>',
-  components: {},
+  components: {
+
+  },
   setup() {
 
     return {}
