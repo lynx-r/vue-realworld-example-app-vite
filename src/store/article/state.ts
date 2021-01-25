@@ -1,17 +1,17 @@
-import { Article, User } from '~/components/models'
+import { Article, User,Comment } from '~/components/models'
 
 export interface ArticleStateInterface {
   article: Article,
   comments: Comment[]
 }
 
-function state (): ArticleStateInterface {
+function state(): ArticleStateInterface {
   return {
     article: {
       author: {} as User,
-      title: "",
-      description: "",
-      body: "",
+      title: '',
+      description: '',
+      body: '',
       tagList: []
     },
     comments: []

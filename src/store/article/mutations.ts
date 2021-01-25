@@ -1,5 +1,5 @@
 import { MutationTree } from 'vuex'
-import { Article } from '~/components/models'
+import { Article, Comment } from '~/components/models'
 import { ArticleMutationTypes } from './article-mutation-types'
 import { ArticleStateInterface } from './state'
 

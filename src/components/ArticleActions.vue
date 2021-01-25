@@ -32,15 +32,10 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore } from '~/store'
 import { Article } from '~/components/models'
-import {
-  ARTICLE_DELETE,
-  FAVORITE_ADD,
-  FAVORITE_REMOVE,
-  FETCH_PROFILE_FOLLOW,
-  FETCH_PROFILE_UNFOLLOW
-} from '~/store/actions.type'
+import { useStore } from '~/store'
+import { FETCH_PROFILE_FOLLOW, FETCH_PROFILE_UNFOLLOW } from '~/store/actions.type'
+import { ArticleActionTypes } from '~/store/article/article-action-types'
 
 interface ArticleActionsProps {
   article: Article
@@ -82,7 +77,7 @@ export default defineComponent({
         router.push({name: 'login'})
         return
       }
-      const action: string = article.favorited ? FAVORITE_REMOVE : FAVORITE_ADD
+      const action: string = article.favorited ? ArticleActionTypes.FAVORITE_REMOVE : ArticleActionTypes.FAVORITE_ADD
       // todo
       store.dispatch(action, article.slug)
     }
@@ -103,7 +98,7 @@ export default defineComponent({
 
     async function deleteArticle() {
       try {
-        await store.dispatch(ARTICLE_DELETE, article.slug)
+        await store.dispatch(ArticleActionTypes.ARTICLE_DELETE, article.slug)
         // todo
         await router.push('/')
       } catch (err) {

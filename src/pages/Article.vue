@@ -3,7 +3,7 @@
     <div class="banner">
       <div class="container">
         <h1>{{ article.title }}</h1>
-        <RwvArticleMeta :article="article" :actions="true"></RwvArticleMeta>
+        <ArticleMeta :article="article" :actions="true"></ArticleMeta>
       </div>
     </div>
     <div class="container page">
@@ -12,39 +12,39 @@
           <div v-html="parseMarkdown(article.body)"></div>
           <ul class="tag-list">
             <li v-for="(tag, index) of article.tagList" :key="tag + index">
-              <RwvTag
-                :name="tag"
-                className="tag-default tag-pill tag-outline"
-              ></RwvTag>
+              <VTag
+                  :name="tag"
+                  className="tag-default tag-pill tag-outline"
+              ></VTag>
             </li>
           </ul>
         </div>
       </div>
-      <hr />
+      <hr/>
       <div class="article-actions">
-        <RwvArticleMeta :article="article" :actions="true"></RwvArticleMeta>
+        <ArticleMeta :article="article" :actions="true"></ArticleMeta>
       </div>
       <div class="row">
         <div class="col-xs-12 col-md-8 offset-md-2">
-          <RwvCommentEditor
-            v-if="isAuthenticated"
-            :slug="slug"
-            :userImage="currentUser.image"
+          <CommentEditor
+              v-if="isAuthenticated"
+              :slug="slug"
+              :userImage="currentUser.image"
           >
-          </RwvCommentEditor>
+          </CommentEditor>
           <p v-else>
             <router-link :to="{ name: 'login' }">Sign in</router-link>
             or
             <router-link :to="{ name: 'register' }">sign up</router-link>
             to add comments on this article.
           </p>
-          <RwvComment
-            v-for="(comment, index) in comments"
-            :slug="slug"
-            :comment="comment"
-            :key="index"
+          <Comment
+              v-for="(comment, index) in comments"
+              :slug="slug"
+              :comment="comment"
+              :key="index"
           >
-          </RwvComment>
+          </Comment>
         </div>
       </div>
     </div>
@@ -52,17 +52,17 @@
 </template>
 
 <script lang="ts">
+import marked from 'marked'
 import { computed, defineComponent } from 'vue'
-import marked from "marked";
+import { useRouter } from 'vue-router'
 import ArticleMeta from '~/components/ArticleMeta.vue'
-import {useStore} from "~/store";
-import RwvComment from "~/components/Comment";
-import RwvCommentEditor from "~/components/CommentEditor";
-import RwvTag from "~/components/VTag";
-import { FETCH_ARTICLE, FETCH_COMMENTS } from "~/store/actions.type";
+import CommentEditor from '~/components/CommentEditor.vue'
+import VTag from '~/components/VTag.vue'
+import { useStore } from '~/store'
+import { ArticleActionTypes } from '~/store/article/article-action-types'
 
 export default defineComponent({
-  name: "Article",
+  name: 'Article',
   props: {
     slug: {
       type: String,
@@ -73,28 +73,28 @@ export default defineComponent({
     ArticleMeta,
     Comment,
     CommentEditor,
-    Tag
+    VTag
   },
   setup() {
     const store = useStore()
+    const router = useRouter()
 
-    const article = computed(() => store.getters.)
-  },
-  beforeRouteEnter(to, from, next) {
-    Promise.all([
-      store.dispatch(FETCH_ARTICLE, to.params.slug),
-      store.dispatch(FETCH_COMMENTS, to.params.slug)
-    ]).then(() => {
-      next();
-    });
-  },
-  computed: {
-    ...mapGetters(["article", "currentUser", "comments", "isAuthenticated"])
-  },
-  methods: {
-    parseMarkdown(content) {
-      return marked(content);
-    }
+    const article = computed(() => store.getters['article/article'])
+    const currentUser = computed(() => store.getters['auth/currentUser'])
+    const isAuthenticated = computed(() => store.getters['auth/isAuthenticated'])
+    const comments = computed(() => store.getters['article/comments'])
+
+    const parseMarkdown = (content: string) => marked(content)
+
+    router.beforeResolve((to, from, next) =>
+        Promise.all([
+          store.dispatch(ArticleActionTypes.FETCH_ARTICLE, to.params.slug),
+          store.dispatch(ArticleActionTypes.FETCH_COMMENTS, to.params.slug)
+        ]).then(() => {
+          next()
+        }))
+
+    return {article, currentUser, comments, isAuthenticated, parseMarkdown}
   }
-});
+})
 </script>

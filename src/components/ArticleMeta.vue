@@ -41,7 +41,7 @@ import date from '~/common/date.filter'
 import ArticleActions from '~/components/ArticleActions.vue'
 import { Article } from '~/components/models'
 import { useStore } from '~/store'
-import { FAVORITE_ADD, FAVORITE_REMOVE } from '~/store/actions.type'
+import { ArticleActionTypes } from '~/store/article/article-action-types'
 
 interface ArticleMetaProps {
   article: Article
@@ -78,7 +78,7 @@ export default defineComponent({
         router.push({name: 'login'})
         return
       }
-      const action: string = article.favorited ? FAVORITE_REMOVE : FAVORITE_ADD
+      const action: string = article.favorited ? ArticleActionTypes.FAVORITE_REMOVE : ArticleActionTypes.FAVORITE_ADD
       store.dispatch(action, article.slug)
     }
 

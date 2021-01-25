@@ -1,9 +1,11 @@
 import { GetterTree } from 'vuex'
+import { Article, Comment } from '~/components/models'
 import { StateInterface } from '..'
 import { ArticleStateInterface } from './state'
 
 type Getters = {
-  someAction(state: ArticleStateInterface): boolean
+  article(state: ArticleStateInterface): Article
+  comments(state: ArticleStateInterface): Comment[]
 }
 
 export type ArticleGetters = {
@@ -11,9 +13,11 @@ export type ArticleGetters = {
 }
 
 const getters: GetterTree<ArticleStateInterface, StateInterface> & Getters = {
-  someAction(state) {
-    return state.prop
-    // your code
+  article(state) {
+    return state.article
+  },
+  comments(state) {
+    return state.comments
   }
 }
 

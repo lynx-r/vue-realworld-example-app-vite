@@ -1,4 +1,8 @@
 import { CommitOptions, createStore, DispatchOptions, Store as VuexStore } from 'vuex'
+import { ArticleActions } from '~/store/article/actions'
+import { ArticleGetters } from '~/store/article/getters'
+import { ArticleMutations } from '~/store/article/mutations'
+import { ArticleStateInterface } from '~/store/article/state'
 import { AuthActions } from '~/store/auth/actions'
 import { AuthGetters } from '~/store/auth/getters'
 import { AuthMutations } from '~/store/auth/mutations'
@@ -30,6 +34,7 @@ export interface StateInterface {
   home: HomeStateInterface,
   auth: AuthStateInterface,
   profile: ProfileStateInterface,
+  article: ArticleStateInterface
 }
 
 const modules = {home, auth, profile}
@@ -61,7 +66,7 @@ store.dispatch = newDispatch
 /**
  * Must be augmented with every module **Mutations**
  */
-type Mutations = AuthMutations & HomeMutations & ProfileMutations
+type Mutations = AuthMutations & HomeMutations & ProfileMutations & ArticleMutations
 
 type Commit = {
   <K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
@@ -74,7 +79,7 @@ type Commit = {
 /**
  * Must be augmented with every module **Actions**
  */
-type Actions = HomeActions & AuthActions & ProfileActions
+type Actions = HomeActions & AuthActions & ProfileActions & ArticleActions
 
 type Dispatch = {
   <K extends keyof Actions>(
@@ -87,7 +92,7 @@ type Dispatch = {
 /**
  * Must be augmented with every module **Getters**
  */
-type Getters = HomeGetters & AuthGetters & ProfileGetters
+type Getters = HomeGetters & AuthGetters & ProfileGetters & ArticleGetters
 
 export type Store =
   Omit<VuexStore<StateInterface>, 'getters' | 'commit' | 'dispatch'>
