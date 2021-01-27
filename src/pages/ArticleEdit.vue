@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-md-10 offset-md-1 col-xs-12">
           <ListErrors :errors="errors" />
-          <form @submit.prevent="onPublish(article.slug)">
+          <form @submit.prevent="onPublish(article.value.slug)">
             <fieldset :disabled="inProgress">
               <fieldset class="form-group">
                 <input
@@ -92,7 +92,7 @@ export default defineComponent({
 
     const article = computed(() => store.getters['article/article'])
 
-    const onPublish = (slug) => {
+    const onPublish = (slug: string) => {
       let action = slug ? ArticleActionTypes.ARTICLE_EDIT : ArticleActionTypes.ARTICLE_PUBLISH;
       inProgress.value = true;
       store
@@ -110,13 +110,13 @@ export default defineComponent({
           });
     }
 
-    const removeTag = (tag) => {
+    const removeTag = (tag: string) => {
       store.dispatch(ArticleActionTypes.ARTICLE_EDIT_REMOVE_TAG, tag);
     }
 
-    const addTag = (tag) => {
+    const addTag = (tag: string) => {
       store.dispatch(ArticleActionTypes.ARTICLE_EDIT_ADD_TAG, tag);
-      tagInput.value = null;
+      tagInput.value = '';
     }
 
     router.beforeResolve(async (to, from, next) => {
