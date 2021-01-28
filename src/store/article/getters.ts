@@ -6,6 +6,7 @@ import { ArticleStateInterface } from './state'
 type Getters = {
   article(state: ArticleStateInterface): Article
   comments(state: ArticleStateInterface): Comment[]
+  isLoading(state: ArticleStateInterface): boolean
 }
 
 export type ArticleGetters = {
@@ -18,6 +19,10 @@ const getters: GetterTree<ArticleStateInterface, StateInterface> & Getters = {
   },
   comments(state) {
     return state.comments
+  },
+  isLoading(state: ArticleStateInterface): boolean {
+    console.log('getter', state.isLoading)
+    return state.isLoading
   }
 }
 

@@ -72,7 +72,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { onBeforeRouteLeave, onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
 import { useStore } from '~/store'
 import { ProfileActionTypes } from '~/store/profile/profile-action-types'
 
@@ -82,7 +82,6 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const route = useRoute()
-    const router = useRouter()
 
     onMounted(() => store.dispatch(ProfileActionTypes.FETCH_PROFILE, route.params))
 
@@ -105,10 +104,6 @@ export default defineComponent({
     const unfollow = () => {
       store.dispatch(ProfileActionTypes.FETCH_PROFILE_UNFOLLOW, route.params);
     }
-
-    watch(() => route.params, (params) => {
-      store.dispatch(ProfileActionTypes.FETCH_PROFILE, params)
-    })
 
     return {currentUser, isAuthenticated, profile, isCurrentUser, follow, unfollow}
   },

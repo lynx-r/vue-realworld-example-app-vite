@@ -20,8 +20,6 @@ type AugmentedActionContext = {
 } & Omit<ActionContext<ArticleStateInterface, StateInterface>, 'commit'>
 
 export interface ArticleActions {
-  [ArticleActionTypes.SOME_ACTION](context: AugmentedActionContext, payload: boolean): void
-
   [ArticleActionTypes.FETCH_ARTICLE](context: AugmentedActionContext, articleSlug: string, prevArticle: Article): Promise<Article | void>
 
   [ArticleActionTypes.FETCH_COMMENTS](context: AugmentedActionContext, articleSlug: string): Promise<Comment[]>
@@ -48,13 +46,15 @@ export interface ArticleActions {
 }
 
 const actions: ActionTree<ArticleStateInterface, StateInterface> & ArticleActions = {
-  async [ArticleActionTypes.FETCH_ARTICLE](context, articleSlug, prevArticle) {
+  async [ArticleActionTypes.FETCH_ARTICLE]({commit}, articleSlug, prevArticle) {
+    console.log('fetch')
     // avoid extronuous network call if article exists
     if (prevArticle !== undefined) {
-      return context.commit(ArticleMutationTypes.SET_ARTICLE, prevArticle)
+      return commit(ArticleMutationTypes.SET_ARTICLE, prevArticle)
     }
+    commit(ArticleMutationTypes.FETCH_START)
     const {data} = await ArticlesService.get(articleSlug)
-    context.commit(ArticleMutationTypes.SET_ARTICLE, data.article)
+    commit(ArticleMutationTypes.SET_ARTICLE, data.article)
     return data as Article
   },
   async [ArticleActionTypes.FETCH_COMMENTS](context, articleSlug) {
@@ -97,6 +97,7 @@ const actions: ActionTree<ArticleStateInterface, StateInterface> & ArticleAction
     context.commit(ArticleMutationTypes.TAG_REMOVE, tag)
   },
   [ArticleActionTypes.ARTICLE_RESET_STATE]({commit}) {
+    console.log('reset')
     commit(ArticleMutationTypes.RESET_STATE)
   }
 }

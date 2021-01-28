@@ -31,7 +31,7 @@ export default defineComponent({
     const { article } = toRefs(props)
     const articleLink = computed(() => ({
       name: 'article',
-      params: { slug: article?.slug }
+      params: { slug: article.value.slug }
     }))
     return {
       article,

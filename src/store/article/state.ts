@@ -2,6 +2,7 @@ import { Article, User,Comment } from '~/components/models'
 
 export interface ArticleStateInterface {
   article: Article,
+  isLoading: boolean,
   comments: Comment[]
 }
 
@@ -14,6 +15,7 @@ function state(): ArticleStateInterface {
       body: '',
       tagList: []
     },
+    isLoading: false,
     comments: []
   }
 }
