@@ -1,15 +1,15 @@
 <template>
-  <div v-if="!!article?.value" class="article-page">
+  <div v-if="!!article.createdAt" class="article-page">
     <div class="banner">
       <div class="container">
-        <h1>{{ article.value.title }}</h1>
+        <h1>{{ article.title }}</h1>
         <ArticleMeta :article="article" :actions="true"></ArticleMeta>
       </div>
     </div>
     <div class="container page">
       <div class="row article-content">
         <div class="col-xs-12">
-          <div v-html="parseMarkdown(article.value.body)"></div>
+          <div v-html="parseMarkdown(article.body)"></div>
           <ul class="tag-list">
             <li v-for="(tag, index) of article.tagList" :key="tag + index">
               <VTag
@@ -52,9 +52,9 @@
 </template>
 
 <script lang="ts">
-import marked from 'marked'
-import { computed, defineComponent } from 'vue'
-import { useRouter } from 'vue-router'
+import * as marked from 'marked'
+import { computed, defineComponent, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import ArticleMeta from '~/components/ArticleMeta.vue'
 import CommentEditor from '~/components/CommentEditor.vue'
 import VTag from '~/components/VTag.vue'
@@ -78,25 +78,38 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const router = useRouter()
+    const route = useRoute()
 
-    const article = computed(() => store.getters['article/article'])
+    onMounted(async () => {
+      console.log('mounted?')
+      await store.dispatch(ArticleActionTypes.FETCH_ARTICLE, {slug: route.params.slug})
+      await store.dispatch(ArticleActionTypes.FETCH_COMMENTS, route.params.slug)
+      console.log('mounted')
+    })
+
+    const isLoading = computed(() => store.getters['article/isLoading'])
     const currentUser = computed(() => store.getters['auth/currentUser'])
     const isAuthenticated = computed(() => store.getters['auth/isAuthenticated'])
     const comments = computed(() => store.getters['article/comments'])
+    const article = computed(() => store.getters['article/article'])
 
     const parseMarkdown = (content: string) => marked(content)
 
-    router.beforeResolve((to, from, next) => {
-      console.log('???', to, from)
-      return Promise.all([
-        store.dispatch(ArticleActionTypes.FETCH_ARTICLE, to.params.slug),
-        store.dispatch(ArticleActionTypes.FETCH_COMMENTS, to.params.slug)
-      ]).then(() => {
-        next()
-      })
+
+    watch(() => router.params, (params) => {
     })
 
-    return {article, currentUser, comments, isAuthenticated, parseMarkdown}
+    // router.beforeResolve((to, from, next) => {
+    //   console.log('???', to, from)
+    //   return Promise.all([
+    //     store.dispatch(ArticleActionTypes.FETCH_ARTICLE, to.params.slug),
+    //     store.dispatch(ArticleActionTypes.FETCH_COMMENTS, to.params.slug)
+    //   ]).then(() => {
+    //     next()
+    //   })
+    // })
+
+    return {isLoading, article, currentUser, comments, isAuthenticated, parseMarkdown}
   }
 })
 </script>

@@ -34,7 +34,6 @@ import { computed, defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { Article } from '~/components/models'
 import { useStore } from '~/store'
-import { FETCH_PROFILE_FOLLOW, FETCH_PROFILE_UNFOLLOW } from '~/store/actions.type'
 import { ArticleActionTypes } from '~/store/article/article-action-types'
 
 interface ArticleActionsProps {
@@ -54,7 +53,7 @@ export default defineComponent({
     const router = useRouter()
     const store = useStore()
 
-    const profile = computed(() => store.getters.profile)
+    const profile = computed(() => store.getters['profile/profile'])
     const isAuthenticated = computed(() => store.getters['auth/isAuthenticated'])
 
     const editArticleLink = computed(() => ({

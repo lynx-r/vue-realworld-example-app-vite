@@ -15,6 +15,7 @@ export type ArticleGetters = {
 
 const getters: GetterTree<ArticleStateInterface, StateInterface> & Getters = {
   article(state) {
+    console.log('??? get art', state.article)
     return state.article
   },
   comments(state) {

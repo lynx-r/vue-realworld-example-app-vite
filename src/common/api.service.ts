@@ -75,6 +75,7 @@ export const ArticlesService = {
   },
 
   get(slug: string) {
+    console.log('slug', slug)
     return ApiService.get('articles', slug)
   },
 

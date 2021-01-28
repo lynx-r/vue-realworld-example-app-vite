@@ -1,4 +1,5 @@
 import { CommitOptions, createStore, DispatchOptions, Store as VuexStore } from 'vuex'
+import article from '~/store/article'
 import { ArticleActions } from '~/store/article/actions'
 import { ArticleGetters } from '~/store/article/getters'
 import { ArticleMutations } from '~/store/article/mutations'
@@ -37,7 +38,7 @@ export interface StateInterface {
   article: ArticleStateInterface
 }
 
-const modules = {home, auth, profile}
+const modules = {home, auth, profile, article}
 
 export const store = createStore({
   modules

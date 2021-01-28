@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs } from 'vue'
+import { computed, defineComponent, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import date from '~/common/date.filter'
 import ArticleActions from '~/components/ArticleActions.vue'
@@ -52,7 +52,7 @@ interface ArticleMetaProps {
 
 export default defineComponent({
   name: 'ArticleMeta',
-  props: ['article', 'actions', 'currentUser', 'isAuthenticated'],
+  props: ['article', 'actions', 'isAuthenticated'],
   components: {
     ArticleActions
   },
@@ -60,12 +60,14 @@ export default defineComponent({
     const {
       actions,
       article,
-      currentUser,
       isAuthenticated
     } = toRefs(props)
 
+
     const router = useRouter()
     const store = useStore()
+
+    const currentUser = computed(() => store.getters['auth/currentUser'])
 
     const isCurrentUser = () =>
         currentUser.username && article.author.username
