@@ -1,18 +1,18 @@
 <template>
   <div>
-    <ListErrors :errors="errors" />
+    <ListErrors :errors="errors"/>
     <form class="card comment-form" @submit.prevent="onSubmit(slug, comment)">
       <div class="card-block">
         <textarea
-          class="form-control"
-          v-model="comment"
-          placeholder="Write a comment..."
-          rows="3"
+            class="form-control"
+            v-model="comment"
+            placeholder="Write a comment..."
+            rows="3"
         >
         </textarea>
       </div>
       <div class="card-footer">
-        <img :src="userImage" class="comment-author-img" />
+        <img :src="userImage" class="comment-author-img"/>
         <button class="btn btn-sm btn-primary">Post Comment</button>
       </div>
     </form>
@@ -20,38 +20,39 @@
 </template>
 
 <script>
-import { ref, toRefs } from 'vue';
-import { useStore } from '~/store';
-import { ArticleActionTypes } from '~/store/article/article-action-types';
-import ListErrors from "./ListErrors.vue";
+import { ref, toRefs } from 'vue'
+import { useStore } from '~/store'
+import { ArticleActionTypes } from '~/store/article/article-action-types'
+import ListErrors from './ListErrors.vue'
 
 export default {
-  name: "CommentEditor",
-  components: { ListErrors },
+  name: 'CommentEditor',
+  components: {ListErrors},
   props: {
-    slug: { type: String, required: true },
-    content: { type: String, required: false },
-    userImage: { type: String, required: false }
+    slug: {type: String, required: true},
+    content: {type: String, required: false},
+    userImage: {type: String, required: false}
   },
   setup(props) {
-    const store = useStore();
+    const store = useStore()
     const {slug, content, userImage} = toRefs(props)
     const comment = ref(content || null)
     const errors = ref({})
 
-    const onSubmit = (slug, comment) => {
+    const onSubmit = (slug, newComment) => {
       store
-          .dispatch(ArticleActionTypes.COMMENT_CREATE, { slug, comment })
+          .dispatch(ArticleActionTypes.COMMENT_CREATE, {slug, comment: newComment})
           .then(() => {
-            comment.value = null;
-            errors.value = {};
+            comment.value = null
+            errors.value = {}
           })
-          .catch(({ response }) => {
-            errors.value = response.data.errors;
-          });
+          .catch((err) => {
+            console.log(err)
+            // errors.value = response.data.errors
+          })
     }
 
     return {slug, userImage, comment, errors, onSubmit}
   }
-};
+}
 </script>

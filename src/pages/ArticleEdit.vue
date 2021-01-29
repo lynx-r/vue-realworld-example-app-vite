@@ -2,10 +2,9 @@
   <div class="editor-page">
     <div class="container page">
       <div class="row">
-        <div class="col-md-10 offset-md-1 col-xs-12">
+        <div v-if="isLoaded" class="col-md-10 offset-md-1 col-xs-12">
           <ListErrors :errors="errors"/>
-          {{ isLoading?.value }}
-          <form v-if="!!article" @submit.prevent="onPublish(article.value.slug)">
+          <form @submit.prevent="onPublish(article.slug)">
             <fieldset :disabled="inProgress">
               <fieldset class="form-group">
                 <input
@@ -91,34 +90,34 @@ export default defineComponent({
     const tagInput = ref('')
     const inProgress = ref(false)
     const errors = ref({} as Errors)
+    const isLoaded = ref(false)
 
     const article = computed(() => store.getters['article/article'])
-    const isLoading = computed(() => store.getters['article/isLoading'])
-    console.log('???', article.value)
-    console.log(isLoading?.value)
 
-    router.beforeResolve((to, from, next) => {
-          console.log('route', to, from)
-          return next()
-          // return Promise
-          //     .all([
-          //       store.dispatch(ArticleActionTypes.ARTICLE_RESET_STATE),
-          //       store.dispatch(
-          //           ArticleActionTypes.FETCH_ARTICLE,
-          //           route.params.slug,
-          //           route.params.previousArticle
-          //       )
-          //     ])
-          //     .then(next)
-        }
-    )
+    onMounted(async () => {
+      // SO: https://github.com/vuejs/vue-router/issues/1034
+      // If we arrive directly to this url, we need to fetch the article
+      await store.dispatch(ArticleActionTypes.ARTICLE_RESET_STATE)
+      const params = route.params
+      if (!!params.slug) {
+        const articleParams = {slug: params.slug, prevArticle: params.previousArticle}
+        console.log('edit article ???', articleParams)
+        await store.dispatch(ArticleActionTypes.FETCH_ARTICLE, articleParams)
+      }
+      isLoaded.value = true
+    })
 
     onBeforeRouteUpdate(async (to, from, next) => {
       // Reset state if user goes from /editor/:id to /editor
       // The component is not recreated so we use to hook to reset the state.
-      console.log('update')
+      console.log('update???')
       await store.dispatch(ArticleActionTypes.ARTICLE_RESET_STATE)
       return next()
+    })
+
+    onBeforeRouteLeave(async (to, from, next) => {
+      await store.dispatch(ArticleActionTypes.ARTICLE_RESET_STATE)
+      next()
     })
 
     const onPublish = (slug: string) => {
@@ -127,6 +126,7 @@ export default defineComponent({
       store
           .dispatch(action)
           .then(({data}) => {
+            console.log(data)
             inProgress.value = false
             router.push({
               name: 'article',
@@ -135,6 +135,7 @@ export default defineComponent({
           })
           .catch(({response}) => {
             inProgress.value = false
+            console.log(response)
             errors.value = response.data.errors
           })
     }
@@ -148,25 +149,7 @@ export default defineComponent({
       tagInput.value = ''
     }
 
-    onBeforeRouteLeave(async (to, from, next) => {
-      await store.dispatch(ArticleActionTypes.ARTICLE_RESET_STATE)
-      next()
-    })
-
-    return {isLoading, tagInput, inProgress, errors, article, onPublish, removeTag, addTag}
+    return {isLoaded, tagInput, inProgress, errors, article, onPublish, removeTag, addTag}
   },
-  // async beforeRouteEnter(to, from, next) {
-  //   // SO: https://github.com/vuejs/vue-router/issues/1034
-  //   // If we arrive directly to this url, we need to fetch the article
-  //   await store.dispatch(ARTICLE_RESET_STATE);
-  //   if (to.params.slug !== undefined) {
-  //     await store.dispatch(
-  //       FETCH_ARTICLE,
-  //       to.params.slug,
-  //       to.params.previousArticle
-  //     );
-  //   }
-  //   return next();
-  // },
 })
 </script>

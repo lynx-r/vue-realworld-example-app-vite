@@ -49,11 +49,9 @@ export interface ArticleActions {
 const actions: ActionTree<ArticleStateInterface, StateInterface> & ArticleActions = {
   async [ArticleActionTypes.FETCH_ARTICLE]({commit}, {slug, prevArticle}) {
     // avoid extronuous network call if article exists
-    console.log('??? prev', prevArticle)
     if (prevArticle !== undefined) {
       return commit(ArticleMutationTypes.SET_ARTICLE, prevArticle)
     }
-    commit(ArticleMutationTypes.FETCH_START)
     const {data} = await ArticlesService.get(slug)
     commit(ArticleMutationTypes.SET_ARTICLE, data.article)
     return data as Article
@@ -65,11 +63,11 @@ const actions: ActionTree<ArticleStateInterface, StateInterface> & ArticleAction
   },
   async [ArticleActionTypes.COMMENT_CREATE](context, payload) {
     await CommentsService.post(payload.slug, payload.comment)
-    context.dispatch(ArticleMutationTypes.FETCH_COMMENTS, payload.slug)
+    await context.dispatch(ArticleMutationTypes.FETCH_COMMENTS, payload.slug)
   },
   async [ArticleActionTypes.COMMENT_DESTROY](context, payload) {
     await CommentsService.destroy(payload.slug!, payload.commentId!)
-    context.dispatch(ArticleMutationTypes.FETCH_COMMENTS, payload.slug)
+    await context.dispatch(ArticleMutationTypes.FETCH_COMMENTS, payload.slug)
   },
   async [ArticleActionTypes.FAVORITE_ADD](context, slug) {
     const {data} = await FavoriteService.add(slug)
@@ -98,7 +96,6 @@ const actions: ActionTree<ArticleStateInterface, StateInterface> & ArticleAction
     context.commit(ArticleMutationTypes.TAG_REMOVE, tag)
   },
   [ArticleActionTypes.ARTICLE_RESET_STATE]({commit}) {
-    console.log()
     commit(ArticleMutationTypes.RESET_STATE)
   }
 }

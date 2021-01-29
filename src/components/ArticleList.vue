@@ -67,8 +67,8 @@ export default defineComponent({
         offset: (cp - 1) * ipp,
         limit: ipp,
       }
-      if (author) {
-        filter.author = author
+      if (!!author) {
+        filter.author = author.value
       }
       if (tag) {
         filter.tag = tag

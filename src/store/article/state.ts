@@ -1,23 +1,24 @@
+import * as _ from 'lodash'
 import { Article, User,Comment } from '~/components/models'
 
 export interface ArticleStateInterface {
   article: Article,
-  isLoading: boolean,
   comments: Comment[]
 }
 
+export const initialState = {
+  article: {
+    author: {} as User,
+    title: '',
+    description: '',
+    body: '',
+    tagList: []
+  },
+  comments: []
+}
+
 function state(): ArticleStateInterface {
-  return {
-    article: {
-      author: {} as User,
-      title: '',
-      description: '',
-      body: '',
-      tagList: []
-    },
-    isLoading: false,
-    comments: []
-  }
+  return _.cloneDeep({...initialState})
 }
 
 export default state

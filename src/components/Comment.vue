@@ -25,7 +25,7 @@
 
 import date from '~/common/date.filter'
 import { ArticleActionTypes } from '~/store/article/article-action-types'
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, toRefs } from 'vue'
 import { useStore } from '~/store'
 
 export default defineComponent({
@@ -35,12 +35,13 @@ export default defineComponent({
     comment: {type: Object, required: true}
   },
   setup(props) {
+    const {slug, comment} = toRefs(props)
     const store = useStore()
 
     const currentUser = computed(() => store.getters['auth/currentUser'])
     const isCurrentUser = computed(() => {
-      if (currentUser.value.username && props.comment.author.username) {
-        return props.comment.author.username === currentUser.username
+      if (currentUser.value.username && comment.value.author.username) {
+        return comment.value.author.username === currentUser.username
       }
       return false
     })
@@ -49,7 +50,7 @@ export default defineComponent({
       store.dispatch(ArticleActionTypes.COMMENT_DESTROY, {slug, commentId})
     }
 
-    return {...props, currentUser, isCurrentUser, destroy, date}
+    return {comment, slug, currentUser, isCurrentUser, destroy, date}
   },
 })
 </script>

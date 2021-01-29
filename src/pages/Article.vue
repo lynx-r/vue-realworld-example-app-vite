@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!!article.createdAt" class="article-page">
+  <div v-if="isLoaded" class="article-page">
     <div class="banner">
       <div class="container">
         <h1>{{ article.title }}</h1>
@@ -53,11 +53,11 @@
 
 <script lang="ts">
 import * as marked from 'marked'
-import { computed, defineComponent, onMounted, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import ArticleMeta from '~/components/ArticleMeta.vue'
-import CommentEditor from '~/components/CommentEditor.vue'
 import Comment from '~/components/Comment.vue'
+import CommentEditor from '~/components/CommentEditor.vue'
 import VTag from '~/components/VTag.vue'
 import { useStore } from '~/store'
 import { ArticleActionTypes } from '~/store/article/article-action-types'
@@ -78,17 +78,16 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const router = useRouter()
     const route = useRoute()
 
+    const isLoaded = ref(false)
+
     onMounted(async () => {
-      console.log('mounted?')
       await store.dispatch(ArticleActionTypes.FETCH_ARTICLE, {slug: route.params.slug})
       await store.dispatch(ArticleActionTypes.FETCH_COMMENTS, route.params.slug)
-      console.log('mounted')
+      isLoaded.value = true
     })
 
-    const isLoading = computed(() => store.getters['article/isLoading'])
     const currentUser = computed(() => store.getters['auth/currentUser'])
     const isAuthenticated = computed(() => store.getters['auth/isAuthenticated'])
     const comments = computed(() => store.getters['article/comments'])
@@ -96,21 +95,7 @@ export default defineComponent({
 
     const parseMarkdown = (content: string) => marked(content)
 
-
-    watch(() => router.params, (params) => {
-    })
-
-    // router.beforeResolve((to, from, next) => {
-    //   console.log('???', to, from)
-    //   return Promise.all([
-    //     store.dispatch(ArticleActionTypes.FETCH_ARTICLE, to.params.slug),
-    //     store.dispatch(ArticleActionTypes.FETCH_COMMENTS, to.params.slug)
-    //   ]).then(() => {
-    //     next()
-    //   })
-    // })
-
-    return {isLoading, article, currentUser, comments, isAuthenticated, parseMarkdown}
+    return {isLoaded, article, currentUser, comments, isAuthenticated, parseMarkdown}
   }
 })
 </script>

@@ -5,5 +5,4 @@ export enum ArticleMutationTypes {
   SET_ARTICLE = 'SET_ARTICLE',
   FETCH_COMMENTS = 'FETCH_COMMENTS',
   SET_COMMENTS = 'SET_COMMENTS',
-  FETCH_START = 'FETCH_START',
 }
