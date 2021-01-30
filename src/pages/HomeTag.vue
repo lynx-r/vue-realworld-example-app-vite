@@ -5,9 +5,9 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import ArticleList from '~/components/ArticleList'
+import ArticleList from '~/components/ArticleList.vue'
 
 export default defineComponent({
   name: 'HomeTag',
@@ -16,7 +16,10 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute()
-    const tag = computed(() => route.params.tag)
+    const tag = ref(route.params.tag)
+    watch(() => route.params, (params) => {
+      tag.value = params.tag
+    })
     return {tag}
   }
 })

@@ -36,9 +36,9 @@ export type ListType = 'feed' | 'all'
 export interface Filter {
   offset: number
   limit: number
-  author: User
-  tag: string
-  favorited: boolean
+  author?: User
+  tag?: string
+  favorited?: boolean
 }
 
 export interface ListConfig {

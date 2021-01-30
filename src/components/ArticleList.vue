@@ -16,8 +16,8 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, toRef, toRefs, watch } from 'vue'
-import { Article, Filter, ListConfig } from '~/components/models'
+import { computed, defineComponent, onMounted, reactive, ref, toRef, watch } from 'vue'
+import { Article, ListConfig } from '~/components/models'
 import VArticlePreview from '~/components/VArticlePreview.vue'
 import VPagination from '~/components/VPagination.vue'
 import { useStore } from '~/store'
@@ -44,70 +44,63 @@ export default defineComponent({
     VArticlePreview,
     VPagination
   },
-  setup: function (props: ArticleListProps) {
-    const {
-      author,
-      favorited,
-      tag,
-      type,
-    } = toRefs(props)
-
-    const itemsPerPage = toRef(props, 'itemsPerPage')
-
+  setup(props: ArticleListProps) {
     const store = useStore()
     const isLoading = computed(() => store.getters['home/isLoading'])
     const articlesCount = computed(() => store.getters['home/articlesCount'])
     const articles = computed<Article[]>(() => store.getters['home/articles'])
+    const itemsPerPageProp = toRef(props, 'itemsPerPage')
+    const itemsPerPage = computed(() => itemsPerPageProp.value || 10)
 
     const currentPage = ref(1)
-    const listConfig = computed<ListConfig>(() => {
-      const ipp = itemsPerPage.value || 10
-      const cp = currentPage.value
-      const filter: Filter = {
-        offset: (cp - 1) * ipp,
-        limit: ipp,
+
+    const listConfig = reactive<ListConfig>({
+      filter: {
+        limit: props.itemsPerPage || 10,
+        offset: currentPage.value,
+        favorited: props.favorited,
+        author: props.author,
+        tag: props.tag
+      },
+      type: 'all'
+    })
+
+    watch(props, () => {
+      listConfig.filter = {
+        limit: props.itemsPerPage || 10,
+        offset: currentPage.value,
+        favorited: props.favorited,
+        author: props.author,
+        tag: props.tag
       }
-      if (!!author) {
-        filter.author = author.value
-      }
-      if (tag) {
-        filter.tag = tag
-      }
-      if (favorited) {
-        filter.favorited = favorited
-      }
-      const typeV = type?.value || 'all'
-      return {
-        type: typeV,
-        filter
-      }
+      listConfig.type = props.type
     })
 
     const pages = computed(() => {
-      if (isLoading || articlesCount.value <= itemsPerPage!) {
+      if (isLoading || articlesCount.value <= itemsPerPage.value) {
         return []
       }
       return [
-        ...Array(Math.ceil(articlesCount.value / itemsPerPage!)).keys()
+        ...Array(Math.ceil(articlesCount.value / itemsPerPage.value)).keys()
       ].map(e => e + 1)
     })
 
-    const fetchArticles = () => store.dispatch(HomeActionTypes.FETCH_ARTICLES, listConfig.value)
+    const fetchArticles = () => store.dispatch(HomeActionTypes.FETCH_ARTICLES, listConfig)
 
     const resetPagination = () => {
-      listConfig.value.offset = 0
+      listConfig.filter.offset = 0
       currentPage.value = 1
     }
 
     watch(currentPage, (newValue) => {
-      listConfig.value.offset = (newValue - 1) * itemsPerPage!
+      listConfig.filter.offset = (newValue - 1) * itemsPerPage.value
       fetchArticles()
     })
 
-    watch(() => [type, author, tag, favorited], () => {
+    watch(props, () => {
       resetPagination()
       fetchArticles()
-    })
+    }, {deep: true})
 
     onMounted(() => {
       fetchArticles()
