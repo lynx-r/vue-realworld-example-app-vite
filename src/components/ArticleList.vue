@@ -62,7 +62,7 @@ export default defineComponent({
         author: props.author,
         tag: props.tag
       },
-      type: 'all'
+      type: props.type || 'all'
     })
 
     watch(props, () => {
