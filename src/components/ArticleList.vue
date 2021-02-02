@@ -62,7 +62,7 @@ export default defineComponent({
     const itemsPerPageProp = toRef(props, 'itemsPerPage')
     const itemsPerPage = computed(() => itemsPerPageProp.value)
 
-    const currentPage = ref(1)
+    const currentPage = ref(0)
 
     const listConfig = reactive<ListConfig>({
       filter: {
@@ -107,6 +107,7 @@ export default defineComponent({
     })
 
     watch(currentPage, (newValue) => {
+      console.log(newValue)
       listConfig.filter.offset = (newValue - 1) * itemsPerPage.value
       fetchArticles()
     })

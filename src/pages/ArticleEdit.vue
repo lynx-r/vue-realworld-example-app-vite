@@ -69,7 +69,7 @@
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import { onBeforeRouteLeave, onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
 import ListErrors from '~/components/ListErrors.vue'
-import { Errors } from '~/components/models'
+import { Article, Errors } from '~/components/models'
 import { useStore } from '~/store'
 import { ArticleActionTypes } from '~/store/article/article-action-types'
 
@@ -100,8 +100,8 @@ export default defineComponent({
       await store.dispatch(ArticleActionTypes.ARTICLE_RESET_STATE)
       const params = route.params
       if (!!params.slug) {
-        const articleParams = {slug: params.slug, prevArticle: params.previousArticle}
-        console.log('edit article ???', articleParams)
+        // todo previousArticle?
+        const articleParams = {slug: params.slug as string}
         await store.dispatch(ArticleActionTypes.FETCH_ARTICLE, articleParams)
       }
       isLoaded.value = true
