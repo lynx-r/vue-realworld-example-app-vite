@@ -69,19 +69,19 @@ import { useStore } from '~/store'
 import { AuthActionTypes } from '~/store/auth/auth-action-types'
 
 export default defineComponent({
-  name: 'RwvSettings',
+  name: 'Settings',
   setup() {
     const store = useStore()
     const router = useRouter()
 
     const currentUser = computed(() => store.getters['auth/currentUser'])
 
-    function updateSettings() {
+    const updateSettings = () => {
       store.dispatch(AuthActionTypes.UPDATE_USER, currentUser.value)
           .then(() => router.push({name: 'home'}))
     }
 
-    function logout() {
+    const logout = () => {
       store.dispatch(AuthActionTypes.LOGOUT)
           .then(() => router.push({name: 'home'}))
     }

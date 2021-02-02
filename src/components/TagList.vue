@@ -11,18 +11,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { Tag } from '~/components/models'
-
-interface TagListProps {
-  tags: Tag[]
-}
 
 export default defineComponent({
   name: 'TagList',
-  props: ['tags'],
-  setup(props: TagListProps) {
-    return {...props}
+  props: {
+    tags: Array as PropType<Tag[]>
+  },
+  setup(props) {
+    return {tags: props.tags}
   }
 })
 </script>

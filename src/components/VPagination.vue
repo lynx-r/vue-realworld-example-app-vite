@@ -18,15 +18,19 @@
 
 import { defineComponent, toRefs } from 'vue'
 
-interface VPaginationProps {
-  pages: number[]
-  currentPage: number
-}
-
 export default defineComponent({
   name: 'VPagination',
-  props: ['pages', 'currentPage'],
-  setup(props: VPaginationProps, context) {
+  props: {
+    pages: {
+      type: Array,
+      required: true
+    },
+    currentPage: {
+      type: Number,
+      required: true
+    }
+  },
+  setup(props, context) {
     const {
       currentPage,
       pages

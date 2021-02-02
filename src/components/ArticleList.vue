@@ -16,64 +16,63 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive, ref, toRef, watch } from 'vue'
-import { Article, ListConfig } from '~/components/models'
+import { computed, defineComponent, onMounted, PropType, reactive, ref, toRef, watch } from 'vue'
+import { Article, ListConfig, ListType } from '~/components/models'
 import VArticlePreview from '~/components/VArticlePreview.vue'
 import VPagination from '~/components/VPagination.vue'
 import { useStore } from '~/store'
 import { HomeActionTypes } from '~/store/home/home-action-types'
 
-interface ArticleListProps {
-  type?: any
-  author?: any
-  tag?: string
-  favorited?: boolean
-  itemsPerPage?: number
-}
-
 export default defineComponent({
   name: 'ArticleList',
-  props: [
-    'author',
-    'favorited',
-    'itemsPerPage',
-    'tag',
-    'type',
-  ],
+  props: {
+    type: {
+      type: String as PropType<ListType>,
+      required: false,
+      default: 'all'
+    },
+    author: {
+      type: String,
+      required: false
+    },
+    tag: {
+      type: String,
+      required: false
+    },
+    favorited: {
+      type: String,
+      required: false
+    },
+    itemsPerPage: {
+      type: Number,
+      required: false,
+      default: 10
+    }
+  },
   components: {
     VArticlePreview,
     VPagination
   },
-  setup(props: ArticleListProps) {
+  setup(props) {
     const store = useStore()
+
     const isLoading = computed(() => store.getters['home/isLoading'])
     const articlesCount = computed(() => store.getters['home/articlesCount'])
     const articles = computed<Article[]>(() => store.getters['home/articles'])
     const itemsPerPageProp = toRef(props, 'itemsPerPage')
-    const itemsPerPage = computed(() => itemsPerPageProp.value || 10)
+    const itemsPerPage = computed(() => itemsPerPageProp.value)
 
     const currentPage = ref(1)
 
     const listConfig = reactive<ListConfig>({
       filter: {
-        limit: props.itemsPerPage || 10,
+        limit: props.itemsPerPage,
         offset: currentPage.value,
         favorited: props.favorited,
         author: props.author,
         tag: props.tag
       },
       type: props.type || 'all'
-    })
-
-    watch(props, () => {
-      listConfig.filter = {
-        limit: props.itemsPerPage || 10,
-        offset: currentPage.value,
-        favorited: props.favorited,
-        author: props.author,
-        tag: props.tag
-      }
-      listConfig.type = props.type
     })
 
     const pages = computed(() => {
@@ -92,6 +91,21 @@ export default defineComponent({
       currentPage.value = 1
     }
 
+    watch(props, () => {
+      listConfig.filter = {
+        limit: props.itemsPerPage,
+        offset: currentPage.value,
+        favorited: props.favorited,
+        author: props.author,
+        tag: props.tag
+      }
+      listConfig.type = props.type
+    })
+
+    onMounted(() => {
+      fetchArticles()
+    })
+
     watch(currentPage, (newValue) => {
       listConfig.filter.offset = (newValue - 1) * itemsPerPage.value
       fetchArticles()
@@ -101,10 +115,6 @@ export default defineComponent({
       resetPagination()
       fetchArticles()
     }, {deep: true})
-
-    onMounted(() => {
-      fetchArticles()
-    })
 
     return {
       isLoading,

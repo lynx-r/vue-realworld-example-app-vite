@@ -55,7 +55,7 @@ import { useStore } from '~/store'
 import { AuthActionTypes } from '~/store/auth/auth-action-types'
 
 export default defineComponent({
-  name: 'RwvRegister',
+  name: 'Register',
   setup() {
     const store = useStore()
     const router = useRouter()
@@ -66,9 +66,10 @@ export default defineComponent({
 
     const errors = computed(() => store.state.auth.errors)
 
-    function onSubmit() {
+    const onSubmit = () => {
       store
-          .dispatch(AuthActionTypes.REGISTER, {email: email.value, username: username.value, password: password.value})
+          .dispatch(AuthActionTypes.REGISTER,
+              {email: email.value, username: username.value, password: password.value})
           .then(() => router.push({name: 'home'}))
     }
 
@@ -76,8 +77,8 @@ export default defineComponent({
       email,
       password,
       username,
-      onSubmit,
       errors,
+      onSubmit,
       error
     }
   }

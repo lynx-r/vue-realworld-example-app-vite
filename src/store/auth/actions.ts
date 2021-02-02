@@ -1,7 +1,7 @@
 import { ActionContext, ActionTree } from 'vuex'
 import ApiService from '~/common/api.service'
 import JwtService from '~/common/jwt.service'
-import { User } from '~/components/models'
+import { Credentials, RegisterUser, User } from '~/components/models'
 import { AuthActionTypes } from '~/store/auth/auth-action-types'
 import { AuthMutationTypes } from '~/store/auth/auth-mutation-types'
 import { StateInterface } from '..'
@@ -16,11 +16,11 @@ type AugmentedActionContext = {
 } & Omit<ActionContext<AuthStateInterface, StateInterface>, 'commit'>
 
 export interface AuthActions {
-  [AuthActionTypes.LOGIN]({commit}: AugmentedActionContext, payload: User): Promise<User>
+  [AuthActionTypes.LOGIN]({commit}: AugmentedActionContext, payload: Credentials): Promise<User>
 
   [AuthActionTypes.LOGOUT]({commit}: AugmentedActionContext): void
 
-  [AuthActionTypes.REGISTER]({commit}: AugmentedActionContext, payload: User): Promise<User>
+  [AuthActionTypes.REGISTER]({commit}: AugmentedActionContext, payload: RegisterUser): Promise<User>
 
   [AuthActionTypes.CHECK_AUTH]({commit}: AugmentedActionContext): void
 

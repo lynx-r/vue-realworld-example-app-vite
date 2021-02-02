@@ -71,19 +71,19 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, watch } from 'vue'
-import { onBeforeRouteLeave, onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
+import { computed, defineComponent, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { UserName } from '~/components/models'
 import { useStore } from '~/store'
 import { ProfileActionTypes } from '~/store/profile/profile-action-types'
 
 export default defineComponent({
   name: 'Profile',
-  components: {},
   setup() {
     const store = useStore()
     const route = useRoute()
 
-    onMounted(() => store.dispatch(ProfileActionTypes.FETCH_PROFILE, route.params))
+    onMounted(() => store.dispatch(ProfileActionTypes.FETCH_PROFILE, route.params as UserName))
 
     const currentUser = computed(() => store.getters['auth/currentUser'])
     const isAuthenticated = computed(() => store.getters['auth/isAuthenticated'])
@@ -98,11 +98,11 @@ export default defineComponent({
 
     const follow = () => {
       if (!isAuthenticated.value) return;
-      store.dispatch(ProfileActionTypes.FETCH_PROFILE_FOLLOW, route.params);
+      store.dispatch(ProfileActionTypes.FETCH_PROFILE_FOLLOW, route.params as UserName);
     }
 
     const unfollow = () => {
-      store.dispatch(ProfileActionTypes.FETCH_PROFILE_UNFOLLOW, route.params);
+      store.dispatch(ProfileActionTypes.FETCH_PROFILE_UNFOLLOW, route.params as UserName);
     }
 
     return {currentUser, isAuthenticated, profile, isCurrentUser, follow, unfollow}

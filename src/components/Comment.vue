@@ -41,12 +41,12 @@ export default defineComponent({
     const currentUser = computed(() => store.getters['auth/currentUser'])
     const isCurrentUser = computed(() => {
       if (currentUser.value.username && comment.value.author.username) {
-        return comment.value.author.username === currentUser.username
+        return comment.value.author.username === currentUser.value.username
       }
       return false
     })
 
-    const destroy = (slug, commentId) => {
+    const destroy = (slug: string, commentId: string) => {
       store.dispatch(ArticleActionTypes.COMMENT_DESTROY, {slug, commentId})
     }
 

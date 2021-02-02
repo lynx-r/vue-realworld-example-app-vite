@@ -21,7 +21,7 @@ type AugmentedActionContext = {
 
 export interface ArticleActions {
   [ArticleActionTypes.FETCH_ARTICLE](context: AugmentedActionContext,
-                                     payload: { slug: string, prevArticle: Article }): Promise<Article | void>
+                                     payload: { slug: string, prevArticle?: Article }): Promise<Article | void>
 
   [ArticleActionTypes.FETCH_COMMENTS](context: AugmentedActionContext, articleSlug: string): Promise<Comment[]>
 

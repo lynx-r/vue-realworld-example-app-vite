@@ -110,7 +110,6 @@ export default defineComponent({
     onBeforeRouteUpdate(async (to, from, next) => {
       // Reset state if user goes from /editor/:id to /editor
       // The component is not recreated so we use to hook to reset the state.
-      console.log('update???')
       await store.dispatch(ArticleActionTypes.ARTICLE_RESET_STATE)
       return next()
     })
@@ -123,6 +122,7 @@ export default defineComponent({
     const onPublish = (slug: string) => {
       let action = slug ? ArticleActionTypes.ARTICLE_EDIT : ArticleActionTypes.ARTICLE_PUBLISH
       inProgress.value = true
+      // todo fix type
       store
           .dispatch(action)
           .then(({data}) => {

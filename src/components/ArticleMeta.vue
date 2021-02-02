@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, toRefs } from 'vue'
+import { computed, defineComponent, PropType, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import date from '~/common/date.filter'
 import ArticleActions from '~/components/ArticleActions.vue'
@@ -43,50 +43,48 @@ import { Article } from '~/components/models'
 import { useStore } from '~/store'
 import { ArticleActionTypes } from '~/store/article/article-action-types'
 
-interface ArticleMetaProps {
-  article: Article
-  actions: any
-  currentUser: any
-  isAuthenticated: boolean
-}
-
 export default defineComponent({
   name: 'ArticleMeta',
-  props: ['article', 'actions', 'isAuthenticated'],
+  props: {
+    article: {
+      type: Object as PropType<Article>,
+      required: true
+    },
+    actions: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
+  },
   components: {
     ArticleActions
   },
-  setup(props: ArticleMetaProps) {
-    const {
-      actions,
-      article,
-      isAuthenticated
-    } = toRefs(props)
-
-
+  setup(props) {
     const router = useRouter()
     const store = useStore()
 
     const currentUser = computed(() => store.getters['auth/currentUser'])
+    const isAuthenticated = computed(() => store.getters['auth/isAuthenticated'])
 
     const isCurrentUser = () =>
-        currentUser.username && article.author.username
-            ? currentUser.username === article.author.username
+        currentUser.value.username && props.article.author.username
+            ? currentUser.value.username === props.article.author.username
             : false
 
     const toggleFavorite = () => {
-      if (!isAuthenticated) {
-        // todo
+      if (!isAuthenticated.value) {
         router.push({name: 'login'})
         return
       }
-      const action: string = article.favorited ? ArticleActionTypes.FAVORITE_REMOVE : ArticleActionTypes.FAVORITE_ADD
-      store.dispatch(action, article.slug)
+      const action = props.article.favorited
+          ? ArticleActionTypes.FAVORITE_REMOVE
+          : ArticleActionTypes.FAVORITE_ADD
+      store.dispatch(action, props.article.slug)
     }
 
     return {
-      article,
-      actions,
+      article: props.article,
+      actions: props.actions,
       isCurrentUser,
       toggleFavorite,
       date,
