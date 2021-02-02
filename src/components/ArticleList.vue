@@ -77,7 +77,7 @@ export default defineComponent({
     })
 
     const pages = computed(() => {
-      if (isLoading || articlesCount.value <= itemsPerPage.value) {
+      if (isLoading.value || articlesCount.value <= itemsPerPage.value) {
         return []
       }
       return [

@@ -32,17 +32,15 @@ export default defineComponent({
       pages
     } = toRefs(props)
 
-    function changePage(goToPage: number) {
+    const changePage = (goToPage: number) => {
       if (goToPage === currentPage.value) return
       context.emit('update:currentPage', goToPage)
     }
 
-    function paginationClass(page: number) {
-      return {
-        'page-item': true,
-        active: currentPage.value === page
-      }
-    }
+    const paginationClass = (page: number) => ({
+      'page-item': true,
+      active: currentPage.value === page
+    })
 
     return {
       pages,
