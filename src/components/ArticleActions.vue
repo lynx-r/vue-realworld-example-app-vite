@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import { Article } from '~/components/models'
 import { useStore } from '~/store'

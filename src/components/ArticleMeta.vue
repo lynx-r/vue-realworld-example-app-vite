@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, toRefs } from 'vue'
+import { computed, defineComponent, PropType, toRef, toRefs, watch, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import date from '~/common/date.filter'
 import ArticleActions from '~/components/ArticleActions.vue'
@@ -63,6 +63,8 @@ export default defineComponent({
     const router = useRouter()
     const store = useStore()
 
+    const {article, actions} = toRefs(props)
+
     const currentUser = computed(() => store.getters['auth/currentUser'])
     const isAuthenticated = computed(() => store.getters['auth/isAuthenticated'])
 
@@ -83,8 +85,8 @@ export default defineComponent({
     }
 
     return {
-      article: props.article,
-      actions: props.actions,
+      actions,
+      article,
       isCurrentUser,
       toggleFavorite,
       date,
