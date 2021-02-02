@@ -65,16 +65,36 @@ store.dispatch = newDispatch
 // end newDispatch
 
 /**
+ * overrider origin store.dispatch to add 'module/'
+ */
+const origCommit = store.commit
+
+const newCommit: Commit = (key, payload, options) => {
+  const key_module = Object
+    .entries(modules)
+    .find(([k, v]) => key in v.actionTypes && k)
+  let module = ''
+  if (!!key_module && key_module[1].namespaced) {
+    module = key_module[0] + '/'
+  }
+  const nsKey = module + key
+  origCommit(nsKey, payload, options)
+}
+
+store.commit = newCommit
+// end newCommit
+
+/**
  * Must be augmented with every module **Mutations**
  */
 type Mutations = AuthMutations & HomeMutations & ProfileMutations & ArticleMutations
 
 type Commit = {
   <K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
-    key: K,
+    type: K,
     payload: P,
     options?: CommitOptions
-  ): ReturnType<Mutations[K]>
+  ): void
 }
 
 /**
