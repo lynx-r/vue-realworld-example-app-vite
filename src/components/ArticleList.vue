@@ -107,7 +107,6 @@ export default defineComponent({
     })
 
     watch(currentPage, (newValue) => {
-      console.log(newValue)
       listConfig.filter.offset = (newValue - 1) * itemsPerPage.value
       fetchArticles()
     })

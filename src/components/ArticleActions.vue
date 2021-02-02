@@ -94,7 +94,7 @@ export default defineComponent({
     const deleteArticle = async () => {
       try {
         await store.dispatch(ArticleActionTypes.ARTICLE_DELETE, props.article.slug)
-        await router.push('/')
+        await router.push({name: 'home'})
       } catch (err) {
         console.error(err)
       }
