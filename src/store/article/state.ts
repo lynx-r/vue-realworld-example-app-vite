@@ -1,8 +1,9 @@
 import * as _ from 'lodash'
-import { Article, User,Comment } from '~/components/models'
+import { Article, User, Comment } from '~/components/models'
+import { StateWithModuleName } from '~/store/models'
 
-export interface ArticleStateInterface {
-  article: Article,
+export interface ArticleStateInterface extends StateWithModuleName {
+  article: Article
   comments: Comment[]
 }
 
@@ -14,11 +15,10 @@ export const initialState = {
     body: '',
     tagList: []
   },
-  comments: []
+  comments: [],
+  moduleName: 'article',
 }
 
-function state(): ArticleStateInterface {
-  return _.cloneDeep({...initialState})
-}
+const state: ArticleStateInterface = {...initialState}
 
 export default state

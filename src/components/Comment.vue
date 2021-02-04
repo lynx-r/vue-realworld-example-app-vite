@@ -23,10 +23,10 @@
 
 <script lang="ts">
 
-import date from '~/common/date.filter'
-import { ArticleActionTypes } from '~/store/article/article-action-types'
 import { computed, defineComponent, toRefs } from 'vue'
+import date from '~/common/date.filter'
 import { useStore } from '~/store'
+import { ArticleActionTypes } from '~/store/article/article-action-types'
 
 export default defineComponent({
   name: 'Comment',

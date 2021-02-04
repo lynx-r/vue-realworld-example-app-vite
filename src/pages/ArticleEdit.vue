@@ -122,11 +122,9 @@ export default defineComponent({
     const onPublish = (slug: string) => {
       let action = slug ? ArticleActionTypes.ARTICLE_EDIT : ArticleActionTypes.ARTICLE_PUBLISH
       inProgress.value = true
-      // todo fix type
       store
           .dispatch(action)
           .then(({data}) => {
-            console.log(data)
             inProgress.value = false
             router.push({
               name: 'article',
