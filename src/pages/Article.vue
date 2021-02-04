@@ -53,7 +53,7 @@
 
 <script lang="ts">
 import * as marked from 'marked'
-import { computed, defineComponent, onMounted, ref, watch } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import ArticleMeta from '~/components/ArticleMeta.vue'
 import Comment from '~/components/Comment.vue'
@@ -83,8 +83,8 @@ export default defineComponent({
     const isLoaded = ref(false)
 
     onMounted(async () => {
-      await store.dispatch(ArticleActionTypes.FETCH_ARTICLE, {slug: route.params.slug})
-      await store.dispatch(ArticleActionTypes.FETCH_COMMENTS, route.params.slug)
+      await store.dispatch(ArticleActionTypes.FETCH_ARTICLE, {slug: route.params.slug as string})
+      await store.dispatch(ArticleActionTypes.FETCH_COMMENTS, route.params.slug as string)
       isLoaded.value = true
     })
 

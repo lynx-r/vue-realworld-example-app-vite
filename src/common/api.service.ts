@@ -1,4 +1,3 @@
-import { makeAxios } from '@vue-composable/axios'
 import axiosLib, { AxiosInstance } from 'axios'
 import { Article } from 'components/models'
 import { API_URL } from './config'

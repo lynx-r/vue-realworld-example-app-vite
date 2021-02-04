@@ -19,6 +19,7 @@ export interface Article {
   slug?: string
   comment?: string
   favorited?: boolean
+  following?: boolean
   createdAt?: string
 }
 
@@ -31,14 +32,18 @@ export interface User {
   password: string
 }
 
+export type UserName = Pick<User, 'username'>
+export type Credentials = Pick<User, 'email' | 'password'>
+export type RegisterUser = Pick<User, 'email' | 'username' | 'password'>
+
 export type ListType = 'feed' | 'all'
 
 export interface Filter {
   offset: number
   limit: number
-  author: User
-  tag: string
-  favorited: boolean
+  author?: string
+  tag?: string
+  favorited?: string
 }
 
 export interface ListConfig {

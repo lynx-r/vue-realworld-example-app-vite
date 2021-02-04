@@ -1,6 +1,6 @@
 import { ActionContext, ActionTree } from 'vuex'
 import ApiService from '~/common/api.service'
-import { User } from '~/components/models'
+import { User, UserName } from '~/components/models'
 import { StateInterface } from '..'
 import { ProfileActionTypes } from './profile-action-types'
 import { ProfileMutationTypes } from './profile-mutation-types'
@@ -15,9 +15,9 @@ type AugmentedActionContext = {
 } & Omit<ActionContext<ProfileStateInterface, StateInterface>, 'commit'>
 
 export interface ProfileActions {
-  [ProfileActionTypes.FETCH_PROFILE]({commit}: AugmentedActionContext, payload: User): Promise<User>
-  [ProfileActionTypes.FETCH_PROFILE_FOLLOW]({commit}: AugmentedActionContext, payload: User): Promise<User>
-  [ProfileActionTypes.FETCH_PROFILE_UNFOLLOW]({commit}: AugmentedActionContext, payload: User): Promise<User>
+  [ProfileActionTypes.FETCH_PROFILE]({commit}: AugmentedActionContext, payload: UserName): Promise<User>
+  [ProfileActionTypes.FETCH_PROFILE_FOLLOW]({commit}: AugmentedActionContext, payload: UserName): Promise<User>
+  [ProfileActionTypes.FETCH_PROFILE_UNFOLLOW]({commit}: AugmentedActionContext, payload: UserName): Promise<User>
 }
 
 const actions: ActionTree<ProfileStateInterface, StateInterface> & ProfileActions = {

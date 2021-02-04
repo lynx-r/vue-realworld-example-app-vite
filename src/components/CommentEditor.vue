@@ -46,9 +46,8 @@ export default {
             comment.value = null
             errors.value = {}
           })
-          .catch((err) => {
-            console.log(err)
-            // errors.value = response.data.errors
+          .catch(({response}) => {
+            errors.value = response.data.errors
           })
     }
 

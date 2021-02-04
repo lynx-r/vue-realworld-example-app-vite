@@ -3,21 +3,25 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
-
-interface VTagProps {
-  name: string
-  className: string
-}
+import { computed, defineComponent, toRefs } from 'vue'
 
 export default defineComponent({
   name: 'VTag',
-  props: ['name', 'className'],
-  setup(props: VTagProps) {
-    const {className = 'tag-pill tag-default', name} = props
+  props: {
+    name: {
+      type: String,
+      required: true
+    },
+    className: {
+      type: String,
+      default: 'tag-pill tag-default'
+    }
+  },
+  setup(props) {
+    const {className, name} = toRefs(props)
     const homeRoute = computed(() => ({
       name: 'home-tag',
-      params: {tag: name}
+      params: {tag: name.value}
     }))
     return {homeRoute, className}
   }

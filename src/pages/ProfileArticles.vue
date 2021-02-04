@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, watch } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 import ArticleList from '~/components/ArticleList.vue'
 
@@ -17,7 +17,7 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     const author = computed(() => route.params.username)
-    return {author: author.value}
+    return {author}
   },
 })
 </script>

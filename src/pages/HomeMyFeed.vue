@@ -1,16 +1,17 @@
 <template>
   <div class="home-my-feed">
-    <RwvArticleList type="feed"/>
+    <ArticleList type="feed"/>
   </div>
 </template>
 
 <script lang="ts">
-import RwvArticleList from '~/components/ArticleList.vue'
+import { defineComponent } from 'vue'
+import ArticleList from '~/components/ArticleList.vue'
 
-export default {
-  name: 'rwv-home-my-feed',
+export default defineComponent({
+  name: 'home-my-feed',
   components: {
-    RwvArticleList
+    ArticleList
   }
-}
+})
 </script>

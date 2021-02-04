@@ -18,31 +18,33 @@
 
 import { defineComponent, toRefs } from 'vue'
 
-interface VPaginationProps {
-  pages: number[]
-  currentPage: number
-}
-
 export default defineComponent({
   name: 'VPagination',
-  props: ['pages', 'currentPage'],
-  setup(props: VPaginationProps, context) {
+  props: {
+    pages: {
+      type: Array,
+      required: true
+    },
+    currentPage: {
+      type: Number,
+      required: true
+    }
+  },
+  setup(props, context) {
     const {
       currentPage,
       pages
     } = toRefs(props)
 
-    function changePage(goToPage: number) {
+    const changePage = (goToPage: number) => {
       if (goToPage === currentPage.value) return
       context.emit('update:currentPage', goToPage)
     }
 
-    function paginationClass(page: number) {
-      return {
-        'page-item': true,
-        active: currentPage.value === page
-      }
-    }
+    const paginationClass = (page: number) => ({
+      'page-item': true,
+      active: currentPage.value === page
+    })
 
     return {
       pages,

@@ -1,15 +1,15 @@
 import { Errors, User } from '~/components/models'
+import { StateWithModuleName } from '~/store/models'
 
-export interface ProfileStateInterface {
+export interface ProfileStateInterface extends StateWithModuleName {
   errors: Errors,
   profile: User,
 }
 
-function state (): ProfileStateInterface {
-  return {
-    errors: {},
-    profile: {} as User
-  }
+const state: ProfileStateInterface = {
+  moduleName: 'profile',
+  errors: {},
+  profile: {} as User
 }
 
 export default state

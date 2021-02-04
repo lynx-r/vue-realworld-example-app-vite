@@ -55,9 +55,9 @@ export default defineComponent({
     const email = ref('')
     const password = ref('')
 
-    const onSubmit = (email, password) =>
+    const onSubmit = (email: string, password: string) =>
         store
-            .dispatch(AuthActionTypes.LOGIN, {email: email, password: password})
+            .dispatch(AuthActionTypes.LOGIN, {email, password})
             .then(() => router.push({name: 'home'}))
 
     const errors = computed(() => store.state.auth.errors)
