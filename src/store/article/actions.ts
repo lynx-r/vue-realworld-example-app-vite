@@ -3,7 +3,7 @@ import { ArticlesService, CommentsService, FavoriteService } from '~/common/api.
 import { Article, Comment } from '~/components/models'
 import { HomeMutationTypes } from '~/store/home/home-mutation-types'
 import { HomeMutations } from '~/store/home/mutations'
-import { StateInterface } from '..'
+import { StateInterface } from '../models'
 import { ArticleActionTypes } from './article-action-types'
 import { ArticleMutationTypes } from './article-mutation-types'
 import { ArticleMutations } from './mutations'

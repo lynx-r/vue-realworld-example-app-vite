@@ -1,4 +1,4 @@
-import { StateWithModuleName } from '~/store/models'
+import { StateWithModuleName } from '../models'
 
 export interface <%= name.pascalCase %>StateInterface extends StateWithModuleName {
   prop: boolean

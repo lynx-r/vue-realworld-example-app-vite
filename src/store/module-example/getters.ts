@@ -1,5 +1,5 @@
 import { GetterTree } from 'vuex'
-import { StateInterface } from '..'
+import { StateInterface } from '../models'
 import { ExampleStateInterface } from './state'
 
 type Getters = {

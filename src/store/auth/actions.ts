@@ -4,7 +4,7 @@ import JwtService from '~/common/jwt.service'
 import { Credentials, RegisterUser, User } from '~/components/models'
 import { AuthActionTypes } from '~/store/auth/auth-action-types'
 import { AuthMutationTypes } from '~/store/auth/auth-mutation-types'
-import { StateInterface } from '..'
+import { StateInterface } from '../models'
 import { AuthMutations } from './mutations'
 import { AuthStateInterface } from './state'
 

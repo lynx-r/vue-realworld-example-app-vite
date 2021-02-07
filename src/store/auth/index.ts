@@ -1,6 +1,6 @@
 import { Module } from 'vuex'
 import { AuthActionTypes } from '~/store/auth/auth-action-types'
-import { StateInterface } from '..'
+import { StateInterface } from '../models'
 import state, { AuthStateInterface } from './state'
 import actions from './actions'
 import getters from './getters'
