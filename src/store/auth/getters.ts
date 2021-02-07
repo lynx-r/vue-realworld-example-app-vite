@@ -1,6 +1,6 @@
 import { GetterTree } from 'vuex'
 import { User } from '~/components/models'
-import { StateInterface } from '..'
+import { StateInterface } from '../models'
 import { AuthStateInterface } from './state'
 
 type Getters = {

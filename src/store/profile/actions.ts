@@ -1,7 +1,7 @@
 import { ActionContext, ActionTree } from 'vuex'
 import ApiService from '~/common/api.service'
 import { User, UserName } from '~/components/models'
-import { StateInterface } from '..'
+import { StateInterface } from '../models'
 import { ProfileActionTypes } from './profile-action-types'
 import { ProfileMutationTypes } from './profile-mutation-types'
 import { ProfileMutations } from './mutations'

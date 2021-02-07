@@ -1,5 +1,5 @@
 import { Module } from 'vuex'
-import { StateInterface } from '..'
+import { StateInterface } from '../models'
 import actions from './actions'
 import { ArticleActionTypes } from './article-action-types'
 import getters from './getters'

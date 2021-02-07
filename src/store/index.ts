@@ -5,31 +5,13 @@ import auth from './auth'
 import { AuthStateInterface } from './auth/state'
 import home from './home'
 import { HomeStateInterface } from './home/state'
-import { Commit, Dispatch, QualifierFor, QualifiedKeyType, StateWithModuleName, Store } from './models'
+import { Commit, Dispatch, QualifiedKeyType, QualifierFor, StateWithModuleName, Store } from './models'
 import profile from './profile'
 import { ProfileStateInterface } from './profile/state'
 
-// import example from './module-example';
-// import { ExampleStateInterface } from './module-example/state';
+const modules = {home, auth, profile, article}
 
-/*
- * If not building with SSR mode, you can
- * directly export the Store instantiation
- */
-
-export interface StateInterface {
-  // Define your own store structure, using submodules if needed
-  // example: ExampleStateInterface;
-  // Declared as unknown to avoid linting issue. Best to strongly type as per the line above.
-  home: HomeStateInterface,
-  auth: AuthStateInterface,
-  profile: ProfileStateInterface,
-  article: ArticleStateInterface
-}
-
-export const modules = {home, auth, profile, article}
-
-export const store = createStore({
+const store = createStore({
   modules
 })
 
@@ -39,8 +21,8 @@ export const store = createStore({
 const origDispatch = store.dispatch
 
 const newDispatch: Dispatch = (key, payload, options) => {
-  const qKey = qualifyKey('mutation', key)
-  return origDispatch(qKey, payload, options)
+  const type = qualifyKey('mutation', key)
+  return origDispatch(type, payload, options)
 }
 
 store.dispatch = newDispatch
@@ -53,19 +35,14 @@ store.dispatch = newDispatch
 const origCommit = store.commit
 
 const newCommit: Commit = (key, payload, options) => {
-  const qKey = qualifyKey('action', key)
-  origCommit(qKey, payload, options)
+  const type = qualifyKey('action', key)
+  origCommit(type, payload, options)
 }
 
 store.commit = newCommit
 
 // end newCommit
 
-export function useStore(): Store {
-  return store
-}
-
-// private
 const qualifyKey = <T extends QualifierFor>(type: QualifierFor, key: QualifiedKeyType<T>) => {
   const module = Object
     .values(modules)
@@ -79,4 +56,18 @@ const qualifyKey = <T extends QualifierFor>(type: QualifierFor, key: QualifiedKe
   return !!module
     ? (module.state as StateWithModuleName).moduleName + '/' + key
     : key
+}
+
+export interface StateInterface {
+  // Define your own store structure, using submodules if needed
+  // example: ExampleStateInterface;
+  // Declared as unknown to avoid linting issue. Best to strongly type as per the line above.
+  home: HomeStateInterface,
+  auth: AuthStateInterface,
+  profile: ProfileStateInterface,
+  article: ArticleStateInterface
+}
+
+export function useStore(): Store {
+  return store
 }

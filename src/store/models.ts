@@ -1,4 +1,8 @@
 import { CommitOptions, DispatchOptions, Store as VuexStore } from 'vuex'
+import { ArticleStateInterface } from '~/store/article/state'
+import { AuthStateInterface } from '~/store/auth/state'
+import { HomeStateInterface } from '~/store/home/state'
+import { ProfileStateInterface } from '~/store/profile/state'
 import { ArticleActions } from './article/actions'
 import { ArticleGetters } from './article/getters'
 import { ArticleMutations } from './article/mutations'
@@ -8,7 +12,6 @@ import { AuthMutations } from './auth/mutations'
 import { HomeActions } from './home/actions'
 import { HomeGetters } from './home/getters'
 import { HomeMutations } from './home/mutations'
-import { StateInterface } from './index'
 import { ProfileActions } from './profile/actions'
 import { ProfileGetters } from './profile/getters'
 import { ProfileMutations } from './profile/mutations'
@@ -20,6 +23,16 @@ type Actions = HomeActions & AuthActions & ProfileActions & ArticleActions
 type Getters = HomeGetters & AuthGetters & ProfileGetters & ArticleGetters
 
 // exported
+
+export interface StateInterface {
+  // Define your own store structure, using submodules if needed
+  // example: ExampleStateInterface;
+  // Declared as unknown to avoid linting issue. Best to strongly type as per the line above.
+  home: HomeStateInterface,
+  auth: AuthStateInterface,
+  profile: ProfileStateInterface,
+  article: ArticleStateInterface
+}
 
 export type Commit = {
   <K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(

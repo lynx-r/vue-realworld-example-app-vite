@@ -1,5 +1,5 @@
 import { ActionContext, ActionTree } from 'vuex'
-import { StateInterface } from '..'
+import { StateInterface } from '../models'
 import { ExampleActionTypes } from './example-action-types'
 import { ExampleMutationTypes } from './example-mutation-types'
 import { ExampleMutations } from './mutations'

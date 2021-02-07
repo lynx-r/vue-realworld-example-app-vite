@@ -1,5 +1,5 @@
 import { ActionContext, ActionTree, CommitOptions } from 'vuex'
-import { StateInterface } from '..'
+import { StateInterface } from '../models'
 import { <%= name.pascalCase %>ActionTypes } from './<%= name.kebabCase %>-action-types'
 import { <%= name.pascalCase %>MutationTypes } from './<%= name.kebabCase %>-mutation-types'
 import { <%= name.pascalCase %>Mutations } from './mutations'
