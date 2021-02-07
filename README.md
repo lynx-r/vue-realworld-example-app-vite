@@ -1,4 +1,4 @@
-The rewritten example of [gothinkster/vue-realworld-example-app](https://github.com/gothinkster/vue-realworld-example-app) 
+## The rewritten example of [gothinkster/vue-realworld-example-app](https://github.com/gothinkster/vue-realworld-example-app) 
 
 ### Features
 
