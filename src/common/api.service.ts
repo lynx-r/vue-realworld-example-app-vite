@@ -79,10 +79,12 @@ export const ArticlesService = {
 
   create(params: Article) {
     return ApiService.post('articles', {article: params})
+      .then(({data: {article}}) => article as Article)
   },
 
   update(slug: string, params: Article) {
     return ApiService.update('articles', slug, {article: params})
+      .then(({data: {article}}) => article as Article)
   },
 
   destroy(slug: string) {

@@ -47,7 +47,7 @@ export type Dispatch = {
     key: K,
     payload?: Parameters<Actions[K]>[1],
     options?: DispatchOptions,
-  ): Promise<ReturnType<Actions[K]>>
+  ): ReturnType<Actions[K]>
 }
 
 export type Store =

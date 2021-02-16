@@ -4,7 +4,7 @@
       <div class="row">
         <div v-if="isLoaded" class="col-md-10 offset-md-1 col-xs-12">
           <ListErrors :errors="errors"/>
-          <form @submit.prevent="onPublish(article.slug)">
+          <form @submit.prevent="onPublish()">
             <fieldset :disabled="inProgress">
               <fieldset class="form-group">
                 <input
@@ -95,21 +95,16 @@ export default defineComponent({
     const article = computed(() => store.getters['article/article'])
 
     onMounted(async () => {
-      // SO: https://github.com/vuejs/vue-router/issues/1034
-      // If we arrive directly to this url, we need to fetch the article
       await store.dispatch(ArticleActionTypes.ARTICLE_RESET_STATE)
       const params = route.params
       if (!!params.slug) {
-        // todo previousArticle?
-        const articleParams = {slug: params.slug as string}
-        await store.dispatch(ArticleActionTypes.FETCH_ARTICLE, articleParams)
+        // if editing
+        await store.dispatch(ArticleActionTypes.FETCH_ARTICLE, {slug: params.slug as string})
       }
       isLoaded.value = true
     })
 
     onBeforeRouteUpdate(async (to, from, next) => {
-      // Reset state if user goes from /editor/:id to /editor
-      // The component is not recreated so we use to hook to reset the state.
       await store.dispatch(ArticleActionTypes.ARTICLE_RESET_STATE)
       return next()
     })
@@ -119,17 +114,17 @@ export default defineComponent({
       next()
     })
 
-    const onPublish = (slug: string) => {
-      let action = slug ? ArticleActionTypes.ARTICLE_EDIT : ArticleActionTypes.ARTICLE_PUBLISH
+    const onPublish = () => {
+      const action = !!article.value.slug ? ArticleActionTypes.ARTICLE_EDIT : ArticleActionTypes.ARTICLE_PUBLISH
       inProgress.value = true
       store
           .dispatch(action)
-          .then(({data}) => {
-            inProgress.value = false
+          .then((article) => {
             router.push({
               name: 'article',
-              params: {slug: data.article.slug}
+              params: {slug: article.slug!}
             })
+            inProgress.value = false
           })
           .catch(({response}) => {
             inProgress.value = false

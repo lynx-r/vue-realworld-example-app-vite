@@ -18,7 +18,7 @@ type AugmentedActionContext = {
 export interface AuthActions {
   [AuthActionTypes.LOGIN]({commit}: AugmentedActionContext, payload: Credentials): Promise<User>
 
-  [AuthActionTypes.LOGOUT]({commit}: AugmentedActionContext): void
+  [AuthActionTypes.LOGOUT]({commit}: AugmentedActionContext): Promise<void>
 
   [AuthActionTypes.REGISTER]({commit}: AugmentedActionContext, payload: RegisterUser): Promise<User>
 
@@ -41,7 +41,10 @@ const actions: ActionTree<AuthStateInterface, StateInterface> & AuthActions = {
     })
   },
   [AuthActionTypes.LOGOUT]({commit}) {
-    commit(AuthMutationTypes.PURGE_AUTH)
+    return new Promise((resolve => {
+      commit(AuthMutationTypes.PURGE_AUTH)
+      resolve()
+    }))
   },
   [AuthActionTypes.REGISTER]({commit}, credentials) {
     return new Promise((resolve, reject) => {
