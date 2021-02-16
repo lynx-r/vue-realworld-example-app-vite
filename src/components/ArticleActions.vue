@@ -44,7 +44,6 @@ export default defineComponent({
     canModify: {type: Boolean, required: true}
   },
   setup(props) {
-
     const router = useRouter()
     const store = useStore()
 
