@@ -35,8 +35,7 @@ export default {
   },
   setup(props) {
     const store = useStore()
-    const {slug, content, userImage} = toRefs(props)
-    const comment = ref(content || null)
+    const comment = ref(props.content || '')
     const errors = ref({})
 
     const onSubmit = (slug, newComment) => {
@@ -51,7 +50,7 @@ export default {
           })
     }
 
-    return {slug, userImage, comment, errors, onSubmit}
+    return {comment, errors, onSubmit}
   }
 }
 </script>

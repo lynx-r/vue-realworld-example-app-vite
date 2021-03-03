@@ -8,16 +8,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRef } from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: "ListErorrs",
   props: {
     errors: { type: Object, required: true }
   },
-  setup(props) {
-    const errors = toRef(props, 'errors')
-    return {errors}
-  }
 })
 </script>

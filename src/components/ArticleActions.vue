@@ -100,7 +100,6 @@ export default defineComponent({
     }
 
     return {
-      canModify: props.canModify,
       isAuthenticated,
       profile,
       editArticleLink,

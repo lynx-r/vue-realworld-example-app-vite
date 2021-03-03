@@ -35,13 +35,12 @@ export default defineComponent({
     comment: {type: Object, required: true}
   },
   setup(props) {
-    const {slug, comment} = toRefs(props)
     const store = useStore()
 
     const currentUser = computed(() => store.getters['auth/currentUser'])
     const isCurrentUser = computed(() => {
-      if (currentUser.value.username && comment.value.author.username) {
-        return comment.value.author.username === currentUser.value.username
+      if (currentUser.value.username && props.comment.author.username) {
+        return props.comment.author.username === currentUser.value.username
       }
       return false
     })
@@ -50,7 +49,7 @@ export default defineComponent({
       store.dispatch(ArticleActionTypes.COMMENT_DESTROY, {slug, commentId})
     }
 
-    return {comment, slug, currentUser, isCurrentUser, destroy, date}
+    return {currentUser, isCurrentUser, destroy, date}
   },
 })
 </script>

@@ -16,7 +16,7 @@
 
 <script lang="ts">
 
-import { defineComponent, toRefs } from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'VPagination',
@@ -31,23 +31,17 @@ export default defineComponent({
     }
   },
   setup(props, context) {
-    const {
-      currentPage,
-      pages
-    } = toRefs(props)
-
     const changePage = (goToPage: number) => {
-      if (goToPage === currentPage.value) return
+      if (goToPage === props.currentPage) return
       context.emit('update:currentPage', goToPage)
     }
 
     const paginationClass = (page: number) => ({
       'page-item': true,
-      active: currentPage.value === page
+      active: props.currentPage === page
     })
 
     return {
-      pages,
       changePage,
       paginationClass
     }
