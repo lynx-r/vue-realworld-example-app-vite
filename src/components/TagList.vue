@@ -19,8 +19,5 @@ export default defineComponent({
   props: {
     tags: Array as PropType<Tag[]>
   },
-  setup(props) {
-    return {tags: props.tags}
-  }
 })
 </script>

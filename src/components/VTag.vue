@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, toRefs } from 'vue'
+import { computed, defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'VTag',
@@ -18,12 +18,11 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const {className, name} = toRefs(props)
     const homeRoute = computed(() => ({
       name: 'home-tag',
-      params: {tag: name.value}
+      params: {tag: props.name.value}
     }))
-    return {homeRoute, className}
+    return {homeRoute}
   }
 })
 </script>

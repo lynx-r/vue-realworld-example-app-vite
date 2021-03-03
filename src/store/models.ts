@@ -50,6 +50,8 @@ export type Dispatch = {
   ): ReturnType<Actions[K]>
 }
 
+export type DispatchReturnType<K extends keyof Actions> = ReturnType<Actions[K]>
+
 export type Store =
   Omit<VuexStore<StateInterface>, 'getters' | 'commit' | 'dispatch'>
   & { commit: Commit }

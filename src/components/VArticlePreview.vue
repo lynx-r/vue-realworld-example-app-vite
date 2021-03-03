@@ -34,7 +34,6 @@ export default defineComponent({
       params: {slug: props.article.slug}
     }))
     return {
-      article: props.article,
       articleLink
     }
   }

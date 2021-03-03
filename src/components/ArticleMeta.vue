@@ -63,8 +63,6 @@ export default defineComponent({
     const router = useRouter()
     const store = useStore()
 
-    const {article, actions} = toRefs(props)
-
     const currentUser = computed(() => store.getters['auth/currentUser'])
     const isAuthenticated = computed(() => store.getters['auth/isAuthenticated'])
 
@@ -85,8 +83,6 @@ export default defineComponent({
     }
 
     return {
-      actions,
-      article,
       isCurrentUser,
       toggleFavorite,
       date,
