@@ -68,49 +68,51 @@ export default defineComponent({
             : 'Favorite Article')
     const favoriteCounter = computed(() => `(${props.article.favoritesCount})`)
 
-    const toggleFavorite = () => {
-      if (!isAuthenticated.value) {
-        router.push({name: 'login'})
-        return
-      }
-      const action = props.article.favorited ? ArticleActionTypes.FAVORITE_REMOVE : ArticleActionTypes.FAVORITE_ADD
-      store.dispatch(action, props.article.slug)
+    return {
+      store,
+      router,
+      isAuthenticated,
+      profile,
+      editArticleLink,
+      favoriteCounter,
+      toggleFavoriteButtonClasses,
+      followUserLabel,
+      favoriteArticleLabel,
     }
+  },
 
-    const toggleFollow = () => {
-      if (!isAuthenticated.value) {
-        router.push({name: 'login'})
+  methods: {
+    toggleFavorite() {
+      if (!this.isAuthenticated) {
+        this.router.push({name: 'login'})
         return
       }
-      const action = props.article.following
+      const action = this.article.favorited ? ArticleActionTypes.FAVORITE_REMOVE : ArticleActionTypes.FAVORITE_ADD
+      this.store.dispatch(action, this.article.slug)
+    },
+
+    toggleFollow() {
+      if (!this.isAuthenticated) {
+        this.router.push({name: 'login'})
+        return
+      }
+      const action = this.article.following
           ? ProfileActionTypes.FETCH_PROFILE_UNFOLLOW
           : ProfileActionTypes.FETCH_PROFILE_FOLLOW
-      store.dispatch(action, {
-        username: profile.value.username
+      this.store.dispatch(action, {
+        username: this.profile.username
       })
-    }
+    },
 
-    const deleteArticle = async () => {
+    async deleteArticle() {
       try {
-        await store.dispatch(ArticleActionTypes.ARTICLE_DELETE, props.article.slug)
-        await router.push({name: 'home'})
+        await this.store.dispatch(ArticleActionTypes.ARTICLE_DELETE, this.article.slug)
+        await this.router.push({name: 'home'})
       } catch (err) {
         console.error(err)
       }
     }
 
-    return {
-      isAuthenticated,
-      profile,
-      editArticleLink,
-      toggleFavoriteButtonClasses,
-      followUserLabel,
-      favoriteArticleLabel,
-      favoriteCounter,
-      toggleFavorite,
-      toggleFollow,
-      deleteArticle
-    }
   }
 })
 </script>

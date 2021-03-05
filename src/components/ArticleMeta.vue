@@ -66,11 +66,6 @@ export default defineComponent({
     const currentUser = computed(() => store.getters['auth/currentUser'])
     const isAuthenticated = computed(() => store.getters['auth/isAuthenticated'])
 
-    const isCurrentUser = () =>
-        currentUser.value.username && props.article.author.username
-            ? currentUser.value.username === props.article.author.username
-            : false
-
     const toggleFavorite = () => {
       if (!isAuthenticated.value) {
         router.push({name: 'login'})
@@ -83,9 +78,31 @@ export default defineComponent({
     }
 
     return {
-      isCurrentUser,
+      router,
+      store,
+      isAuthenticated,
+      currentUser,
       toggleFavorite,
       date,
+    }
+  },
+
+  methods: {
+    isCurrentUser() {
+      return this.currentUser.username && this.article.author.username
+          ? this.currentUser.username === this.article.author.username
+          : false
+    },
+
+    toggleFavorite  () {
+      if (!this.isAuthenticated) {
+        this.router.push({name: 'login'})
+        return
+      }
+      const action = this.article.favorited
+          ? ArticleActionTypes.FAVORITE_REMOVE
+          : ArticleActionTypes.FAVORITE_ADD
+      this.store.dispatch(action, this.article.slug)
     }
   }
 })

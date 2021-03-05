@@ -20,8 +20,6 @@
 </template>
 
 <script>
-import { ref, toRefs } from 'vue'
-import { useStore } from '~/store'
 import { ArticleActionTypes } from '~/store/article/article-action-types'
 import ListErrors from './ListErrors.vue'
 
@@ -33,24 +31,26 @@ export default {
     content: {type: String, required: false},
     userImage: {type: String, required: false}
   },
-  setup(props) {
-    const store = useStore()
-    const comment = ref(props.content || '')
-    const errors = ref({})
 
-    const onSubmit = (slug, newComment) => {
-      store
+  data() {
+    return {
+      comment: this.content || null,
+      errors: {}
+    }
+  },
+
+  methods: {
+    onSubmit(slug, newComment) {
+      this.$store
           .dispatch(ArticleActionTypes.COMMENT_CREATE, {slug, comment: newComment})
           .then(() => {
-            comment.value = null
-            errors.value = {}
+            this.comment = null
+            this.errors = {}
           })
           .catch(({response}) => {
-            errors.value = response.data.errors
+            this.errors = response.data.errors
           })
     }
-
-    return {comment, errors, onSubmit}
   }
 }
 </script>

@@ -85,17 +85,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
-import { useStore } from '~/store'
+import { defineComponent } from 'vue'
+import { mapGetters } from 'vuex'
 
 export default defineComponent({
   name: 'RwvHeader',
-  setup() {
-    const store = useStore()
-    const currentUser = computed(() => store.getters['auth/currentUser'])
-    const isAuthenticated = computed(() => store.getters['auth/isAuthenticated'])
-
-    return {currentUser, isAuthenticated}
+  computed: {
+    ...mapGetters({currentUser: 'auth/currentUser', isAuthenticated: 'auth/isAuthenticated'})
   }
 })
 </script>

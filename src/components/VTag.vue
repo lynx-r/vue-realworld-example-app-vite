@@ -20,7 +20,7 @@ export default defineComponent({
   setup(props) {
     const homeRoute = computed(() => ({
       name: 'home-tag',
-      params: {tag: props.name.value}
+      params: {tag: props.name}
     }))
     return {homeRoute}
   }

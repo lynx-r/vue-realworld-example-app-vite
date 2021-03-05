@@ -28,13 +28,14 @@ export default defineComponent({
     ArticleMeta,
     TagList
   },
-  setup(props) {
-    const articleLink = computed(() => ({
-      name: 'article',
-      params: {slug: props.article.slug}
-    }))
-    return {
-      articleLink
+  computed: {
+    articleLink() {
+      return {
+        name: 'article',
+        params: {
+          slug: this.article.slug
+        }
+      }
     }
   }
 })
